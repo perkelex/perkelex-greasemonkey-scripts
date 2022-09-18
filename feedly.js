@@ -12,8 +12,12 @@ let scrollIntervalCounter = 0;
 setTimeout(() => {
 	let scrollIntervalID = setInterval(() => {
 		scrollIntervalCounter++;
-		document.querySelector("#feedlyFrame").scrollTo(0, document.querySelector("#feedlyFrame").scrollHeight);
-		scrollIntervalCounter === 5 ? clearInterval(scrollIntervalID) : null;
+		const scrollableFrame = document.querySelector("#feedlyFrame");
+		scrollableFrame.scrollTo(0, scrollableFrame.scrollHeight);
+		if (scrollIntervalCounter === 5)  {
+			scrollableFrame.scrollTo(0, 0);
+			clearInterval(scrollIntervalID);
+		}
 	}, scrollIntervalDelay);
 }, pageLoadDelay);
 
