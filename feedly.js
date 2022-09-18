@@ -3,12 +3,27 @@
 // articles containing entries in this array will be removed from the page.
 // case insensitive.
 // special characters need to match.
+const parseDelay = 10000;
+const pageLoadDelay = 5000;
+const scrollIntervalDelay = 1000;
+
+let scrollIntervalCounter = 0;
+
+setTimeout(() => {
+	let scrollIntervalID = setInterval(() => {
+		scrollIntervalCounter++;
+		document.querySelector("#feedlyFrame").scrollTo(0, document.querySelector("#feedlyFrame").scrollHeight);
+		scrollIntervalCounter === 5 ? clearInterval(scrollIntervalID) : null;
+	}, scrollIntervalDelay);
+}, pageLoadDelay);
+
+setTimeout(() => {
+
 const unwantedNews = ["irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "cupa davis"];
 let beforePurge = 0;
 let afterPurge = 0;
 
 // allow some time for the site content to load, otherwise the script is for nothing
-setTimeout(() => {
 	const leftNavList = document.querySelector("nav.LeftnavList div.m-t-2");
 	const articles = document.querySelectorAll("article");
 	beforePurge = articles.length;
@@ -37,4 +52,4 @@ setTimeout(() => {
 	leftNavList.insertBefore(afterPurgediv, leftNavList.firstElementChild);
 	leftNavList.insertBefore(beforePurgeDiv, leftNavList.firstElementChild);
 
-}, 5000);
+}, parseDelay);
