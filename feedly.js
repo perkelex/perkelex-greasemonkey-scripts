@@ -21,13 +21,11 @@ setTimeout(() => {
 	}, scrollIntervalDelay);
 }, pageLoadDelay);
 
-setTimeout(() => {
-
 const unwantedNews = ["irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "cupa davis"];
 let beforePurge = 0;
 let afterPurge = 0;
 
-// allow some time for the site content to load, otherwise the script is for nothing
+setTimeout(() => {
 	const leftNavList = document.querySelector("nav.LeftnavList div.m-t-2");
 	const articles = document.querySelectorAll("article");
 	beforePurge = articles.length;
