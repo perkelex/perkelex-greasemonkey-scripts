@@ -1,57 +1,29 @@
+// ==UserScript==
+// @name     Feedly remove unwanted garbage
+// @version  1
+// @grant    none
+// @match    https://feedly.com/*
+// ==/UserScript==
+
+
 // feedly remove unwanted articles
 
-// articles containing entries in this array will be removed from the page.
-// case insensitive.
-// special characters need to match.
-const parseDelay = 10000;
-const pageLoadDelay = 5000;
-const scrollIntervalDelay = 1000;
+const unwantedNews = [
+"irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "cupa davis",
+"david popovici",
+"Elisabeta a II-a", "reginei elisabeta", "regina elisabeta",
+"charles al III-lea", "regele charles", "regelui charles"
+];
 
-let scrollIntervalCounter = 0;
-
+// start parsing after some time
 setTimeout(() => {
-	let scrollIntervalID = setInterval(() => {
-		scrollIntervalCounter++;
-		const scrollableFrame = document.querySelector("#feedlyFrame");
-		scrollableFrame.scrollTo(0, scrollableFrame.scrollHeight);
-		if (scrollIntervalCounter === 5)  {
-			scrollableFrame.scrollTo(0, 0);
-			clearInterval(scrollIntervalID);
-		}
-	}, scrollIntervalDelay);
-}, pageLoadDelay);
-
-const unwantedNews = ["irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "cupa davis"];
-let beforePurge = 0;
-let afterPurge = 0;
-
-setTimeout(() => {
-	const leftNavList = document.querySelector("nav.LeftnavList div.m-t-2");
-	const articles = document.querySelectorAll("article");
-	beforePurge = articles.length;
-
-	articles.forEach(
-		(article) => {
-			unwantedNews.forEach(keyword =>
-				article.querySelector(".content a").textContent.toLowerCase().includes(keyword) ? article.remove() : null);
-		}
-	);
-
-	afterPurge = document.querySelectorAll("article").length;
-
-	console.log("Before purge:", beforePurge);
-	console.log("After purge:", afterPurge);
-
-	const beforePurgeDiv = document.createElement("div");
-	const afterPurgediv = document.createElement("div");
-
-	beforePurgeDiv.classList.add("LeftnavListRow");
-	afterPurgediv.classList.add("LeftnavListRow");
-
-	beforePurgeDiv.append(document.createTextNode(`Before purge: ${beforePurge}`));
-	afterPurgediv.append(document.createTextNode(`After purge: ${afterPurge}(${afterPurge - beforePurge})`));
-
-	leftNavList.insertBefore(afterPurgediv, leftNavList.firstElementChild);
-	leftNavList.insertBefore(beforePurgeDiv, leftNavList.firstElementChild);
-
-}, parseDelay);
+	// parse and update periodically
+	setInterval(() => {
+		document.querySelectorAll("article").forEach(
+			(article) => {
+				unwantedNews.forEach(keyword =>
+					article.querySelector(".content a").textContent.toLowerCase().includes(keyword.toLowerCase()) ? article.remove() : null);
+			}
+		);
+	}, 3000);
+}, 5000);
