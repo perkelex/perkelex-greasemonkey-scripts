@@ -9,13 +9,17 @@
 // feedly remove unwanted articles
 
 const unwantedNews = [
-"irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu",, "ana bogdan", "cupa davis",
+"irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu",, "ana bogdan", "cupa davis", "serena williams",
 "david popovici",
 "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
 "charles al III-lea", "regele charles", "regelui charles",
-"magnus carlsen", "tenis",
+"magnus carlsen", "tenis", "Transylvanian Open", "Transylvania Open",
 "nicholas david ionel", "sibiu open",
-"ATP", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic"
+"ATP", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
+"Ce facem astăzi în Timișoara?",
+"Alternosfera",
+"baschet",
+"handbal"
 ];
 
 // start parsing after some time
