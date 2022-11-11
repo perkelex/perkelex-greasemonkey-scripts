@@ -19,7 +19,7 @@ setInterval(() => {
         purgeShorts(videos);
         purgeShortVideosFromCreators(videos, spammers);
     }
-}, 5000);
+}, 2000);
 
 function purgeShorts(videoList){
     videoList.forEach(video => {
