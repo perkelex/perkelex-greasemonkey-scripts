@@ -12,13 +12,16 @@ const subscriptionsURL = "/feed/subscriptions/";
 
 const spammers = ["Chris Williamson", "În Dodii"];
 
-setInterval(() => {
-    document.querySelector("div#sections ytd-guide-section-renderer div#items ytd-guide-entry-renderer a[title='Shorts']").remove();
+setInterval(function() {
+    // let benchmarkStartTime = Date.now();
+    document.querySelector("div#sections ytd-guide-section-renderer div#items ytd-guide-entry-renderer a[title='Shorts']").style.display = "none";
     if (location.href.includes(youtubeURL) || location.href.includes(subscriptionsURL)){
         videos = document.querySelectorAll("ytd-grid-video-renderer");
         purgeShorts(videos);
         purgeShortVideosFromCreators(videos, spammers);
     }
+    // let benchamrkStopTime = Date.now();
+    // console.log((benchamrkStopTime - benchmarkStartTime) / 1000);
 }, 2000);
 
 function purgeShorts(videoList){
