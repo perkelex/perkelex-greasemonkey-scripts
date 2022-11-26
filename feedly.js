@@ -23,7 +23,7 @@ const unwantedNews = [
 "horoscop"
 ];
 
-// start parsing after some time
+// start parsing after some time.
 setTimeout(() => {
 	// parse and update periodically
 	setInterval(() => {
