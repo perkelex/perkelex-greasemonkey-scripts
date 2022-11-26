@@ -13,13 +13,14 @@ const unwantedNews = [
 "david popovici",
 "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
 "charles al III-lea", "regele charles", "regelui charles",
-"magnus carlsen", "tenis", "Transylvanian Open", "Transylvania Open",
+"magnus carlsen", "tenis", "Transylvanian Open", "Transylvania Open", "WTA",
 "nicholas david ionel", "sibiu open",
 "ATP", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
 "Ce facem astăzi",
 "Alternosfera",
 "baschet",
-"handbal"
+"handbal",
+"horoscop"
 ];
 
 // start parsing after some time
