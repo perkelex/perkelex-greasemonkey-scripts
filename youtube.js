@@ -19,6 +19,7 @@ setInterval(function() {
         videos = document.querySelectorAll("ytd-grid-video-renderer");
         purgeShorts(videos);
         purgeShortVideosFromCreators(videos, spammers);
+        hideForcedShorts();
     }
     // let benchamrkStopTime = Date.now();
     // console.log((benchamrkStopTime - benchmarkStartTime) / 1000);
@@ -34,12 +35,17 @@ function purgeShortVideosFromCreator(videoList, creatorName){
     videoList.forEach(video => {
         const creator = video.querySelector("a.yt-formatted-string").textContent;
         const videoTime = video.querySelector("ytd-thumbnail-overlay-time-status-renderer span").textContent.replace(/[\r\n\s]/gm, "");
-        (creator === creatorName && timeToSeconds(videoTime) < 1800) ? video.remove() : null;
+        if (videoTime.toLowerCase().includes("live")){ return; }
+        (creator.toLowerCase() === creatorName.toLowerCase() && timeToSeconds(videoTime) < 1800) ? video.remove() : null;
     });
 }
 
 function purgeShortVideosFromCreators(videoList){
     spammers.forEach(spammer => purgeShortVideosFromCreator(videoList, spammer));
+}
+
+function hideForcedShorts(){
+    document.querySelector("ytd-rich-section-renderer.style-scope.ytd-rich-grid-renderer").remove();
 }
 
 // converts hh:mm:ss to seconds for sane processing of time
