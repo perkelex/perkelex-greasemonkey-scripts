@@ -20,7 +20,7 @@ setInterval(function() {
         videos = document.querySelectorAll("ytd-grid-video-renderer");
         purgeShorts(videos);
         purgeShortVideosFromCreators(videos, spammers);
-        // hideForcedShorts();
+        purgeShortVideos(videos);
     }
     // let benchamrkStopTime = Date.now();
     // console.log((benchamrkStopTime - benchmarkStartTime) / 1000);
@@ -36,9 +36,14 @@ function purgeShortVideosFromCreator(videoList, creatorName){
     videoList.forEach(video => {
         const creator = video.querySelector("a.yt-formatted-string").textContent;
         const videoTime = video.querySelector("ytd-thumbnail-overlay-time-status-renderer span").textContent.replace(/[\r\n\s]/gm, "");
-        // if (videoTime.toLowerCase().includes("live")){ return; }
-        // if (videoTime.toLowerCase().includes("upcoming")){ return; }
         (creator.toLowerCase() === creatorName.toLowerCase() && timeToSeconds(videoTime) < 1800) ? video.remove() : null;
+    });
+}
+
+function purgeShortVideos(videoList, durationSec=60){
+    videoList.forEach(video => {
+        const videoTime = video.querySelector("ytd-thumbnail-overlay-time-status-renderer span").textContent.replace(/[\r\n\s]/gm, "");
+        (timeToSeconds(videoTime) <= durationSec) ? video.remove() : null;
     });
 }
 
