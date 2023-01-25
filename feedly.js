@@ -9,20 +9,22 @@
 // feedly remove unwanted articles
 
 const unwantedNews = [
-"irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu",, "ana bogdan", "cupa davis", "serena williams", "Billie Jean King Cup",
-"david popovici",
-"Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
-"charles al III-lea", "regele charles", "regelui charles",
-"magnus carlsen", "tenis", "Transylvanian Open", "Transylvania Open", "WTA",
-"nicholas david ionel", "sibiu open",
-"ATP", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
-"Ce facem astăzi",
+/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams",
+/* inot */ "david popovici",
+/* regina */ "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
+/* familia regala */ "charles al III-lea", "regele charles", "regelui charles",
+/* better tenis */ "magnus carlsen", "tenis", "nicholas david ionel", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
+/* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP",
+/* cretinisme */ "Ce facem astăzi", "horoscop",
 "Alternosfera",
 "baschet",
 "handbal",
-"horoscop"
+"premiile oscar", "nominalizari oscar",
+"Survivor România",
+"(P)"
 ];
 
+console.log("starting");
 // start parsing after some time.
 setTimeout(() => {
 	// parse and update periodically
@@ -30,7 +32,7 @@ setTimeout(() => {
 		document.querySelectorAll("article").forEach(
 			(article) => {
 				unwantedNews.forEach(keyword =>
-					article.querySelector(".content a").textContent.toLowerCase().includes(keyword.toLowerCase()) ? article.remove() : null);
+					article.querySelector("div.EntryTitle").textContent.toLowerCase().includes(keyword.toLowerCase()) ? article.remove() : null);
 			}
 		);
 	}, 3000);
