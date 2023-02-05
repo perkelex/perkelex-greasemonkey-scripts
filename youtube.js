@@ -36,7 +36,9 @@ function purgeShortVideosFromCreator(videoList, creatorName){
     videoList.forEach(video => {
         const creator = video.querySelector("a.yt-formatted-string").textContent;
         const videoTime = video.querySelector("ytd-thumbnail-overlay-time-status-renderer span").textContent.replace(/[\r\n\s]/gm, "");
-        (creator.toLowerCase() === creatorName.toLowerCase() && timeToSeconds(videoTime) < 1800) ? video.remove() : null;
+        if (videoTime) {
+            (creator.toLowerCase() === creatorName.toLowerCase() && timeToSeconds(videoTime) < 1800) ? video.remove() : null;
+        }
     });
 }
 
