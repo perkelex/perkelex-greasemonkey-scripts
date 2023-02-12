@@ -19,6 +19,7 @@ const unwantedNews = [
 "Alternosfera",
 "baschet",
 "handbal",
+"fotbal feminin",
 "premiile oscar", "nominalizari oscar",
 "Survivor România",
 "(P)"
@@ -31,8 +32,10 @@ setTimeout(() => {
 	setInterval(() => {
 		document.querySelectorAll("article").forEach(
 			(article) => {
-				unwantedNews.forEach(keyword =>
-					article.querySelector("div.EntryTitle").textContent.toLowerCase().includes(keyword.toLowerCase()) ? article.remove() : null);
+				unwantedNews.forEach(keyword => {
+					article.querySelector("div.EntryTitle").textContent.toLowerCase().includes(keyword.toLowerCase()) ? article.remove() : null;
+					article.querySelector("div.EntrySummary").textContent.toLowerCase().includes(keyword.toLowerCase()) ? article.remove() : null;
+				});
 			}
 		);
 	}, 3000);
