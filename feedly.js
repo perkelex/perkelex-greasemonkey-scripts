@@ -15,7 +15,7 @@ const unwantedNews = [
 /* familia regala */ "charles al III-lea", "regele charles", "regelui charles",
 /* better tenis */ "magnus carlsen", "tenis", "nicholas david ionel", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
 /* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open",
-/* cretinisme */ "Ce facem astăzi", "horoscop",
+/* cretinisme */ "Ce facem astăzi", "horoscop", "zodie", "zodia", "zodii",
 "Alternosfera",
 "baschet",
 "handbal",
