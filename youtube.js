@@ -5,56 +5,40 @@
 // @include  https://www.youtube.com/
 // @include  https://www.youtube.com/feed/subscriptions
 // @match    https://www.youtube.com/*
+// @require  https://code.jquery.com/jquery-3.6.3.slim.min.js
 // ==/UserScript==
 
 const youtubeURL = "youtube.com";
 const subscriptionsURL = "/feed/subscriptions/";
 
-const spammers = ["Chris Williamson", "În Dodii"];
-
 setInterval(function() {
-    // let benchmarkStartTime = Date.now();
-    document.querySelector("div#sections ytd-guide-section-renderer div#items ytd-guide-entry-renderer a[title='Shorts']").style.display = "none";
-    document.querySelector("ytd-rich-section-renderer.style-scope.ytd-rich-grid-renderer").style.display = "none";
     if (location.href.includes(youtubeURL) || location.href.includes(subscriptionsURL)){
-        videos = document.querySelectorAll("ytd-grid-video-renderer");
-        purgeShorts(videos);
-        purgeShortVideosFromCreators(videos, spammers);
-        purgeShortVideos(videos);
+        removeShortsCategory();
+        purgeShortsInFeed();
+        purgeClandestineShortsSection();
+        purgeShortVideos();
     }
-    // let benchamrkStopTime = Date.now();
-    // console.log((benchamrkStopTime - benchmarkStartTime) / 1000);
 }, 2000);
 
-function purgeShorts(videoList){
-    videoList.forEach(video => {
-        video.querySelector("a[href*='/shorts/']") ? video.remove() : null;
-    });
-}
-
-function purgeShortVideosFromCreator(videoList, creatorName){
-    videoList.forEach(video => {
-        const creator = video.querySelector("a.yt-formatted-string").textContent;
-        const videoTime = video.querySelector("ytd-thumbnail-overlay-time-status-renderer span").textContent.replace(/[\r\n\s]/gm, "");
-        if (videoTime) {
-            (creator.toLowerCase() === creatorName.toLowerCase() && timeToSeconds(videoTime) < 1800) ? video.remove() : null;
+function purgeShortVideos(durationSec=60){
+    $("div#items").each(element => {
+        videoTime = $(element).find("ytd-thumbnail-overlay-time-status-renderer span").outerText;
+        if (videoTime && timeToSeconds(videoTime) <= durationSec){
+            $(element).remove();
         }
     });
 }
 
-function purgeShortVideos(videoList, durationSec=60){
-    videoList.forEach(video => {
-        const videoTime = video.querySelector("ytd-thumbnail-overlay-time-status-renderer span").textContent.replace(/[\r\n\s]/gm, "");
-        (timeToSeconds(videoTime) <= durationSec) ? video.remove() : null;
-    });
+function removeShortsCategory(){
+    $("a[title='Shorts']").remove();
 }
 
-function purgeShortVideosFromCreators(videoList){
-    spammers.forEach(spammer => purgeShortVideosFromCreator(videoList, spammer));
+function purgeShortsInFeed(){
+    $("ytd-grid-video-renderer a[href*='/shorts/']").parents("ytd-grid-video-renderer").remove();
 }
 
-function hideForcedShorts(){
-    document.querySelector("ytd-rich-section-renderer.style-scope.ytd-rich-grid-renderer").remove();
+function purgeClandestineShortsSection(){
+    $("ytd-rich-section-renderer.style-scope.ytd-rich-grid-renderer").remove();
 }
 
 // converts hh:mm:ss to seconds for sane processing of time
