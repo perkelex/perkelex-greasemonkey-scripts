@@ -19,7 +19,7 @@ const unwantedNews = [
 "Alternosfera",
 "baschet",
 "handbal",
-"fotbal feminin", "fotbalistele",
+"fotbal feminin", "fotbalistele", "fetele de la politehnica",
 "premiile oscar", "nominalizari oscar",
 "Survivor România",
 "(P)"
