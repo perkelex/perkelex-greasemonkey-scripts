@@ -18,7 +18,7 @@ const unwantedNews = [
 /* cretinisme */ "Ce facem astăzi", "horoscop", "zodie", "zodia", "zodii",
 "Alternosfera",
 "baschet",
-"handbal",
+"handbal", "csm bucuresti",
 "fotbal feminin", "fotbalistele", "fetele de la politehnica",
 "premiile oscar", "nominalizari oscar",
 "Survivor România",
