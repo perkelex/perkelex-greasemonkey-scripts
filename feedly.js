@@ -25,7 +25,7 @@ const unwantedNews = [
 "(P)"
 ];
 
-console.log("starting");
+// console.log("starting");
 // start parsing after some time.
 setTimeout(() => {
 	// parse and update periodically
