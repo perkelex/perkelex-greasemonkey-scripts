@@ -9,21 +9,22 @@
 // feedly remove unwanted articles
 
 const unwantedNews = [
-/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams", "emmei raducanu", "Sorana Cîrstea",
+/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams", "emmei raducanu", "Sorana Cîrstea", "Soranei Cîrstea", "Cîrstea",
 /* inot */ "david popovici",
 /* regina */ "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
 /* familia regala */ "charles al III-lea", "regele charles", "regelui charles",
 /* better tenis */ "magnus carlsen", "tenis", "nicholas david ionel", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
 /* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open", "billie jean king",
 /* cretinisme */ "Ce facem astăzi", "horoscop", "zodie", "zodia", "zodii",
-"Alternosfera",
-"baschet",
-"handbal", "csm bucuresti",
-"fotbal feminin", "fotbalistele", "fetele de la politehnica",
-"premiile oscar", "nominalizari oscar",
-"Survivor România",
+/* muzica */ "Alternosfera",
+/* baschet */ "baschet",
+/* handbal */ "handbal", "csm bucuresti",
+/* lesser football */ "fotbal feminin", "fotbalistele", "fetele de la politehnica",
+/* filme */ "premiile oscar", "nominalizari oscar",
+/* emisiuni */ "Survivor România",
 "(P)",
-"motogp", "f1"
+/* curse */ "motogp", "f1",
+/* vedeti */ "smiley"
 ];
 
 // console.log("starting");
