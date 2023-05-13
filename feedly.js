@@ -25,7 +25,7 @@ const unwantedNews = [
 "(P)",
 /* curse */ "motogp", "f1",
 /* vedeti */ "smiley", "Rareș Prisacariu",
-/* emisiuni */ "Românii au talent"
+/* emisiuni */ "Românii au talent", "Eurovision"
 ];
 
 // console.log("starting");
