@@ -17,7 +17,7 @@ const unwantedNews = [
 /* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open", "billie jean king",
 /* cretinisme */ "Ce facem astăzi", "horoscop", "zodie", "zodia", "zodii",
 /* muzica */ "Alternosfera",
-/* baschet */ "baschet",
+/* baschet */ "baschet", "WNBA",
 /* handbal */ "handbal", "csm bucuresti",
 /* lesser football */ "fotbal feminin", "fotbalistele", "fetele de la politehnica",
 /* filme */ "premiile oscar", "nominalizari oscar",
