@@ -14,7 +14,7 @@ const unwantedNews = [
 /* regina */ "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
 /* familia regala */ "charles al III-lea", "regele charles", "regelui charles",
 /* better tenis */ "magnus carlsen", "tenis", "nicholas david ionel", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
-/* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open", "billie jean king", "ITF",
+/* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open", "billie jean king", "ITF", "Roland garros",
 /* cretinisme */ "Ce facem astăzi", "horoscop", "zodie", "zodia", "zodii",
 /* muzica */ "Alternosfera",
 /* baschet */ "baschet", "WNBA",
