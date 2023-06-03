@@ -9,7 +9,7 @@
 // feedly remove unwanted articles
 
 const unwantedNews = [
-/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams", "emmei raducanu", "Sorana Cîrstea", "Soranei Cîrstea", "Cîrstea", "Kenin", "Sabalenka", "Jaqueline Cristian", "Rybakina",
+/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams", "emmei raducanu", "Sorana Cîrstea", "Soranei Cîrstea", "Cîrstea", "Kenin", "Sabalenka", "Jaqueline Cristian", "Rybakina", "Bianca Andreescu",
 /* inot */ "david popovici",
 /* regina */ "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
 /* familia regala */ "charles al III-lea", "regele charles", "regelui charles",
