@@ -4,6 +4,7 @@
 // @grant    none
 // @include  https://www.youtube.com/
 // @include  https://www.youtube.com/feed/subscriptions
+// @include  https://www.youtube.com/result/*
 // @match    https://www.youtube.com/*
 // @require  https://code.jquery.com/jquery-3.6.3.slim.min.js
 // ==/UserScript==
@@ -17,6 +18,8 @@ setInterval(function() {
         purgeShortsInFeed();
         purgeClandestineShortsSection();
         purgeShortVideos();
+        removeShortsFromSearchResults();
+        removePeopleAlsoSearchedFor();
     }
 }, 2000);
 
@@ -39,6 +42,14 @@ function purgeShortsInFeed(){
 
 function purgeClandestineShortsSection(){
     $("ytd-rich-section-renderer.style-scope.ytd-rich-grid-renderer").remove();
+}
+
+function removeShortsFromSearchResults(){
+    $("ytd-reel-shelf-renderer").remove();
+}
+
+function removePeopleAlsoSearchedFor(){
+    $("ytd-horizontal-card-list-renderer").remove();
 }
 
 // converts hh:mm:ss to seconds for sane processing of time
