@@ -21,7 +21,7 @@ const unwantedNews = [
 /* handbal */ "handbal", "csm bucuresti",
 /* lesser football */ "fotbal feminin", "fotbalistele", "fetele de la politehnica",
 /* filme */ "premiile oscar", "nominalizari oscar",
-/* emisiuni */ "Survivor România",
+/* emisiuni */ "Survivor România", "te cunosc de undeva",
 "(P)",
 /* curse */ "motogp", "f1",
 /* vedeti */ "smiley", "Rareș Prisacariu",
