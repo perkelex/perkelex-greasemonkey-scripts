@@ -36,8 +36,12 @@ function removeShortsCategory(){
     $("a[title='Shorts']").remove();
 }
 
-function purgeShortsInFeed(){
+function purgeShortsInFeedOld(){
     $("ytd-grid-video-renderer a[href*='/shorts/']").parents("ytd-grid-video-renderer").remove();
+}
+
+function purgeShortsInFeed(){
+    $("a#thumbnail[href*='/shorts/']").parents("ytd-rich-item-renderer").remove();
 }
 
 function purgeClandestineShortsSection(){
