@@ -19,7 +19,7 @@ const unwantedNews = [
 /* muzica */ "Alternosfera",
 /* baschet */ "baschet", "WNBA",
 /* handbal */ "handbal", "csm bucuresti",
-/* lesser football */ "fotbal feminin", "fotbalistele", "fetele de la politehnica",
+/* lesser football */ "fotbal feminin", "fotbalistele", "fetele de la politehnica", "fotbalista", "jucatoarea",
 /* filme */ "premiile oscar", "nominalizari oscar",
 /* emisiuni */ "Survivor România", "te cunosc de undeva",
 "(P)",
