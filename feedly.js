@@ -9,12 +9,12 @@
 // feedly remove unwanted articles
 
 const unwantedNews = [
-/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams", "emmei raducanu", "Sorana Cîrstea", "Soranei Cîrstea", "Cîrstea", "Kenin", "Sabalenka", "Jaqueline Cristian", "Rybakina", "Bianca Andreescu", "Kvitova",
+/* tenis */ "irina begu", "begu", "halep", "ema raducanu", "ema răducanu", "emma răducanu", "ana bogdan", "cupa davis", "serena williams", "emmei raducanu", "Sorana Cîrstea", "Soranei Cîrstea", "Cîrstea", "Kenin", "Sabalenka", "Jaqueline Cristian", "Rybakina", "Bianca Andreescu", "Kvitova", "Gabriela Ruse",
 /* inot */ "david popovici",
 /* regina */ "Elisabeta a II-a", "elisabetei a II-a", "reginei elisabeta", "regina elisabeta",
 /* familia regala */ "charles al III-lea", "regele charles", "regelui charles",
 /* better tenis */ "magnus carlsen", "tenis", "nicholas david ionel", "novak djokovic", "djokovic", "roman safiullin", "safiullin", "marin cilic", "cilic",
-/* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open", "billie jean king", "ITF", "Roland garros", "badminton", "French Open", "Wimbledon",
+/* competitii tenis */ "Alpe Adria Cup", "Transylvanian Open","WTA", "Billie Jean King Cup", "sibiu open", "ATP", "Australian Open", "billie jean king", "ITF", "Roland garros", "badminton", "French Open", "Wimbledon", "US Open",
 /* cretinisme */ "Ce facem astăzi", "horoscop", "zodie", "zodia", "zodii",
 /* muzica */ "Alternosfera",
 /* baschet */ "baschet", "WNBA",
