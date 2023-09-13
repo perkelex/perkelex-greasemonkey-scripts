@@ -5,6 +5,7 @@
 // @include  https://www.youtube.com/
 // @include  https://www.youtube.com/feed/subscriptions
 // @include  https://www.youtube.com/result/*
+// @include  https://www.youtube.com/watch=*
 // @match    https://www.youtube.com/*
 // @require  https://code.jquery.com/jquery-3.6.3.slim.min.js
 // ==/UserScript==
@@ -13,13 +14,14 @@ const youtubeURL = "youtube.com";
 const subscriptionsURL = "/feed/subscriptions/";
 
 setInterval(function() {
-    if (location.href.includes(youtubeURL) || location.href.includes(subscriptionsURL)){
+    if (location.href.includes(youtubeURL) || location.href.includes(subscriptionsURL) || location.href.includes("watch")){
         removeShortsCategory();
         purgeShortsInFeed();
         purgeClandestineShortsSection();
         purgeShortVideos();
         removeShortsFromSearchResults();
         removePeopleAlsoSearchedFor();
+        removeEndOfVideoCards();
     }
 }, 2000);
 
@@ -54,6 +56,10 @@ function removeShortsFromSearchResults(){
 
 function removePeopleAlsoSearchedFor(){
     $("ytd-horizontal-card-list-renderer").remove();
+}
+
+function removeEndOfVideoCards(){
+    $("div.ytp-ce-element").remove();
 }
 
 // converts hh:mm:ss to seconds for sane processing of time
