@@ -27,7 +27,8 @@ const unwantedNews = [
 /* vedeti */ "smiley", "Rareș Prisacariu",
 /* emisiuni */ "Românii au talent", "Eurovision",
 /* F1 */ "Formula 1", "F1", "Verstappen",
-/* sporturi msic */ "canotaj", " polo "
+/* sporturi msic */ "canotaj", " polo ",
+/* actori */ "shannen doherty"
 ];
 
 // console.log("starting");
