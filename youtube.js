@@ -16,7 +16,7 @@ const subscriptionsURL = "/feed/subscriptions/";
 setInterval(function() {
     if (location.href.includes(youtubeURL) || location.href.includes(subscriptionsURL) || location.href.includes("watch")){
         removeShortsCategory();
-        purgeShortsInFeed();
+        purgeShortsInSearch();
         purgeClandestineShortsSection();
         purgeShortVideos();
         removeShortsFromSearchResults();
@@ -38,12 +38,9 @@ function removeShortsCategory(){
     $("a[title='Shorts']").remove();
 }
 
-function purgeShortsInFeedOld(){
-    $("ytd-grid-video-renderer a[href*='/shorts/']").parents("ytd-grid-video-renderer").remove();
-}
-
-function purgeShortsInFeed(){
+function purgeShortsInSearch(){
     $("a#thumbnail[href*='/shorts/']").parents("ytd-rich-item-renderer").remove();
+    $("a#thumbnail[href*='/shorts/']").parents("ytd-video-renderer").remove();
 }
 
 function purgeClandestineShortsSection(){
