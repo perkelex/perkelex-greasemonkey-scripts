@@ -14,6 +14,39 @@
 // Array.from(document.getElementsByClassName('js-reviews-paginator-container')).forEach(element => element.style.display = "block");
 // Array.from(document.getElementsByClassName('btn-view-all-reviews')).forEach(element => element.style.display = "block");
 
-// $("div.card-item:contains('Promovat')").remove();
+const product_clutter_h2_section = [
+    "Produse promovate",
+    "Iti mai recomandam si",
+    "Cumparate frecvent impreuna",
+    "Compara cu produse similare",
+    "Alti clienti au vizitat si",
+    "Produse similare promovate",
+    "Te-ar mai putea interesa si",
+    "Linkuri utile",
+]
 
-console.log($("div.card-item:contains('Promovat')"));
+const product_clutter_h2_div = [
+    "Alti vizitatori au fost interesati si de"
+]
+
+const to_remove_by_id = [
+    "mktp-sell-with-emag"
+]
+
+setInterval(function() {
+    $("div.card-item:contains('Promovat')").remove();
+
+    for (const item of product_clutter_h2_section) {
+        $("h2:contains('" + item + "')").parents("section").remove();
+    }
+
+    for (const item of product_clutter_h2_div) {
+        $("h2:contains('" + item + "')").parents("div.js-nh-recommendations-container").remove();
+    }
+
+    for (const item of to_remove_by_id) {
+        $("#" + item).remove();
+    }
+
+    $("div.mywallet-product-ecredit-pricing").parent("div").remove();
+}, 2000)
