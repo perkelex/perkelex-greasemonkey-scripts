@@ -1,17 +1,17 @@
 // ==UserScript==
-// @name         Gladiatus styles
+// @name         Gladiatus quest janitor
 // @namespace    http://tampermonkey.net/
 // @version      2024-07-03
 // @description  meck lyf easier
 // @author       You
-// @match        https://*.gladiatus.gameforge.com/game*
+// @match        https://*.gladiatus.gameforge.com/game/index.php?mod=quests*
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    const questsToKeep = ["turma", "items", "barbarian village", "opponents at expeditions"]
+    const questsToKeep = ["turma", "items", "barbarian village", "opponents at expeditions", "in enemy hands"]
     const questsToRemoveAnyway = ["defeat each opponent at least once", "succession"]
 
     setTimeout(() => {
