@@ -16,23 +16,23 @@
 
     setTimeout(() => {
         document.querySelectorAll(".contentboard_slot_inactive").forEach(quest => {
-            let iWantitGone = true;
+            let iWantItGone = true;
 
             const questTitle = quest.querySelector(".quest_slot_title").textContent.toLowerCase();
 
             for (const keepKeyword of questsToKeep) {
                 if (questTitle.contains(keepKeyword)) {
-                    iWantitGone = false;
+                    iWantItGone = false;
                 }
             }
 
             for (const removeAnywayKeyword of questsToRemoveAnyway) {
                 if (questTitle.contains(removeAnywayKeyword)) {
-                    iWantitGone = true;
+                    iWantItGone = true;
                 }
             }
 
-            iWantitGone ? quest.remove() : null;
+            iWantItGone ? quest.remove() : null;
             return null;
         });
     }, 500);
