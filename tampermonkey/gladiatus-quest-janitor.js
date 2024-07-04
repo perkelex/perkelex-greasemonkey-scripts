@@ -33,7 +33,6 @@
             }
 
             iWantItGone ? quest.remove() : null;
-            return null;
         });
     }, 500);
 })();
