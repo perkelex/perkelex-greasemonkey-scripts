@@ -32,7 +32,7 @@
                 }
             }
 
-            iWantItGone ? quest.remove() : null;
+            iWantItGone ? quest.style.display = "none" : null;
         });
     }, 500);
 })();
