@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Gladiatus Packages counter
+// @name         Packages
 // @namespace    http://tampermonkey.net/
 // @version      2024-07-03
 // @description  meck lyf easier
@@ -12,10 +12,13 @@
     'use strict';
 
     setTimeout(() => {
-        const packages = document.querySelectorAll(".packageItem");
-        const length = packages.length;
-        const contentHeader = [...document.querySelectorAll("h2.section-header")].filter(node => node.innerText.contains("Content")).forEach(node => node.innerText = `Content: ${length} packages`);
-        console.log(contentHeader);
-        // contentHeader.innerHTML = "Content: " + length + " packages";
+        [...document.querySelectorAll("h2.section-header")].filter(node => node.innerText.contains("Content")).forEach(node => node.innerText = `Content: ${packages.length} packages`);
+
+        setInterval(() => {
+            document.querySelectorAll(".packageItem").forEach(pack => {
+                const sender = pack.querySelector(".sender");
+                sender.innerText.contains("Auction") ? pack.style.backgroundColor = "lightgreen" : null
+            });
+        }, 500);
     }, 250);
 })();

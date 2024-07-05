@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Gladiatus quest janitor
+// @name         Quests
 // @namespace    http://tampermonkey.net/
 // @version      2024-07-03
 // @description  meck lyf easier
@@ -11,8 +11,18 @@
 (function() {
     'use strict';
 
-    const questsToKeep = ["turma", "items", "barbarian village", "opponents at expeditions", "in enemy hands"]
-    const questsToRemoveAnyway = ["defeat each opponent at least once", "succession"]
+    const questsToKeep = [
+        "turma",
+        "items",
+        "bandit camp", // big account expedition
+        "misty mountains", // small account expedition
+        "opponents at expeditions",
+        "in enemy hands", // big account dungeon
+    ]
+    const questsToRemoveAnyway = [
+        "defeat each opponent at least once",
+        "succession"
+    ]
 
     setTimeout(() => {
         document.querySelectorAll(".contentboard_slot_inactive").forEach(quest => {
