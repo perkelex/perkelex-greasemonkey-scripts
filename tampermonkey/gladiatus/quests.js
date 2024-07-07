@@ -15,9 +15,10 @@
         "turma",
         "items",
         "bandit camp", // big account expedition
-        "misty mountains", // small account expedition
+        "wolf cave", // small account expedition
         "opponents at expeditions",
         "in enemy hands", // big account dungeon
+        "the cave of dark intrigue", // small account dungeon
     ]
     const questsToRemoveAnyway = [
         "defeat each opponent at least once",
