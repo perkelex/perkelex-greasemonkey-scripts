@@ -9,8 +9,9 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
+    // 'use strict';
 
+    // Misc
     function print() {
         console.log(arguments);
     }
@@ -20,168 +21,236 @@
         return urlParams.get(param);
     }
 
+
+    // Utils
+    function nameToID(name) {
+        return name.toLowerCase().replaceAll(" ", "-");
+    }
+
+
+    // Functors
     function resetAuctionItemsDisplay() {
         document.querySelectorAll("#auction_table td").forEach(td => {td.style.display = "table-cell"});
         document.querySelectorAll("#auction_table tr").forEach(td => {td.style.display = "table-row"});
     }
 
-    function createResetButton() {
-        const resetButton = document.createElement("button");
-        resetButton.setAttribute("id", `Reset-filter`);
-        resetButton.appendChild(document.createTextNode(`Reset`));
-        resetButton.className += "awesome-button";
-        resetButton.style.margin = "2px";
-        resetButton.addEventListener("click", function() {
-            resetAuctionItemsDisplay();
+    function filterContent(content) {
+        resetAuctionItemsDisplay();
+        const auctionTable = document.querySelector("#auction_table");
+
+        // hide unwanted table cells
+        auctionTable.querySelectorAll("td").forEach(td => {
+            const form = td.querySelector("form");
+            if (form && !form.dataset.item_name.toLowerCase().contains(content.toLowerCase())) {
+                td.style.display = "none";
+            }
         });
 
-        return resetButton;
+        // hide empty table rows
+        auctionTable.querySelectorAll("tr").forEach(tr => {
+            if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+                tr.style.display = "none";
+            }
+        });
     }
 
-    function createFilterButton(filterContent) {
-        const contentButton = document.createElement("button");
-        contentButton.setAttribute("id", `${filterContent}-filter`);
-        contentButton.appendChild(document.createTextNode(`${filterContent}`));
-        contentButton.className += "awesome-button";
-        contentButton.style.margin = "2px";
-        contentButton.addEventListener("click", function() {
-            resetAuctionItemsDisplay();
-            const auctionTable = document.querySelector("#auction_table");
-            // hide unwanted table cells
-            auctionTable.querySelectorAll("td").forEach(td => {
-                const form = td.querySelector("form");
-                if (form && !form.dataset.item_name.contains(filterContent)) {
+    function multiFilterContent() {
+        resetAuctionItemsDisplay();
+        const auctionTable = document.querySelector("#auction_table");
+
+        // hide unwanted table cells
+        auctionTable.querySelectorAll("td").forEach(td => {
+            const form = td.querySelector("form");
+            if (form && ! Array.from(arguments).every(arg => form.dataset.item_name.toLowerCase().contains(arg.toLowerCase()))) {
+                td.style.display = "none";
+            }
+        });
+
+        // hide empty table rows
+        auctionTable.querySelectorAll("tr").forEach(tr => {
+            if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+                tr.style.display = "none";
+            }
+        });
+    }
+
+    function filterMyBids() {
+        resetAuctionItemsDisplay();
+        const auctionTable = document.querySelector("#auction_table");
+
+        // hide unwanted table cells
+        auctionTable.querySelectorAll("td").forEach(td => {
+            const myBidsWithRefresh = td.querySelector("div a span");
+            const myBidsWithoutRefresh = td.querySelector("div span");
+            if (myBidsWithRefresh) {
+                if (!myBidsWithRefresh.style.color.contains("blue")) {
                     td.style.display = "none";
                 }
-            });
-
-            // hide empty table rows
-            auctionTable.querySelectorAll("tr").forEach(tr => {
-                if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
-                    tr.style.display = "none";
-                }
-            });
-        });
-
-        return contentButton;
-    }
-
-    function createMyBidsButton(){
-        // TODO: this
-        const contentButton = document.createElement("button");
-        contentButton.setAttribute("id", `My-bids-filter`);
-        contentButton.appendChild(document.createTextNode("My bids"));
-        contentButton.className += "awesome-button";
-        contentButton.style.margin = "2px";
-        contentButton.addEventListener("click", function() {
-            resetAuctionItemsDisplay();
-            const auctionTable = document.querySelector("#auction_table");
-            // hide unwanted table cells
-            auctionTable.querySelectorAll("td").forEach(td => {
-                const me = td.querySelector("div a span");
-                if (me) {
-                    if (!me.style.color.contains("blue")) {
-                        td.style.display = "none";
-                    }
-                } else {
+            } else if (myBidsWithoutRefresh){
+                if (!myBidsWithoutRefresh.style.color.contains("blue")){
                     td.style.display = "none";
                 }
-            });
-
-            // hide empty table rows
-            auctionTable.querySelectorAll("tr").forEach(tr => {
-                if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
-                    tr.style.display = "none";
-                }
-            });
-
-
+            } else {
+                td.style.display = "none";
+            }
         });
 
-        return contentButton;
+        // hide empty table rows
+        auctionTable.querySelectorAll("tr").forEach(tr => {
+            if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+                tr.style.display = "none";
+            }
+        });
     }
+
+    function showHideElement(elementID) {
+        const element = document.querySelector(`#${elementID}`);
+        element.style.display.contains("block") ? element.style.display = "none" : element.style.display = "block";
+    }
+
+
+    // Generators
+    function createGenericButton(content, action) {
+        const button = document.createElement("button");
+        button.setAttribute("id", `${content.toLowerCase().replaceAll(" ", "-")}-filter`);
+        button.appendChild(document.createTextNode(`${content}`));
+        button.className += "awesome-button";
+        button.style.margin = "0rem 0.25rem";
+        button.addEventListener("click", action);
+        return button;
+    }
+
+    function createFilterButton(content) {
+        const contentFilterButton = createGenericButton(content, content.contains(" ") ? multiFilterContent.bind(this, content.split(" ")) : filterContent.bind(this, content));
+
+        return contentFilterButton;
+    }
+
+    function createFilterCategory(title, children){
+        const category = document.createElement("div");
+        category.setAttribute("id", `filter-${title.toLowerCase()}-category`);
+        category.style.display = "flex";
+        category.style.flexDirection = "column";
+        category.style.gap = "0.25rem";
+        category.style.border = "1px solid black";
+        category.style.borderRadius = "0.5rem";
+
+        const categoryHeader = document.createElement("div");
+        categoryHeader.appendChild(document.createTextNode(title));
+        categoryHeader.style.fontWeight = "bold";
+        categoryHeader.style.textDecoration = "underline";
+        categoryHeader.style.margin = "0rem 0.25rem";
+
+        category.appendChild(categoryHeader);
+
+        for (const child of children){
+            category.appendChild(child);
+        }
+
+        return category;
+    }
+
+    function createSubCategory(title) {
+        const subCategory = document.createElement("div");
+        subCategory.appendChild(document.createTextNode(title));
+        return subCategory;
+    }
+
+    function createSectionHeader(title, action = null) {
+        const sectionHeader = document.createElement("h2");
+        sectionHeader.classList.add("section-header");
+        sectionHeader.setAttribute("id", `${nameToID(title)}`);
+        sectionHeader.style.cursor = "pointer";
+        sectionHeader.style.userSelect = "none";
+        sectionHeader.appendChild(document.createTextNode(title));
+        if (action) sectionHeader.addEventListener("click", action);
+        return sectionHeader;
+    }
+
+    function createSection(title) {
+        const section = document.createElement("section");
+        section.setAttribute("id", `${nameToID(title)}`);
+        section.style.minHeight = "45px";
+        section.style.display = "block";
+        return section;
+    }
+
 
     function addQuickFilters() {
-        const auctionTable = document.querySelector("#auction_table");
-        const auctiontableParent = auctionTable.parentNode;
+        const quickFiltersSection = createSection("Quick Filters Section");
+        const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, nameToID("Quick Filters Section")));
 
-        const quickFilterSectionHeader = document.createElement("h2");
-        quickFilterSectionHeader.classList.add("section-header");
-        quickFilterSectionHeader.setAttribute("id", "quickFilterSectionHeader");
-        quickFilterSectionHeader.style.cursor = "pointer";
-        quickFilterSectionHeader.style.userSelect = "none";
-        quickFilterSectionHeader.appendChild(document.createTextNode("Quick Filters"));
-        quickFilterSectionHeader.addEventListener("click", function () {
-            const qfSection = document.querySelector("#quickFilterSection");
-            qfSection.style.display.contains("block") ? qfSection.style.display = "none" : qfSection.style.display = "block";
-        });
+        const quickFiltersSectionCategoriesContainer = document.createElement("div");
+        quickFiltersSectionCategoriesContainer.setAttribute("id", nameToID("Filter categories container"));
+        quickFiltersSectionCategoriesContainer.style.display = "flex";
+        quickFiltersSectionCategoriesContainer.style.flexDirection = "row";
+        quickFiltersSectionCategoriesContainer.style.columnGap = "0.125rem";
+        quickFiltersSectionCategoriesContainer.style.margin = "0.125rem";
 
-        const quickFiltersSection = document.createElement("section");
-        quickFiltersSection.setAttribute("id", "quickFilterSection");
-        quickFiltersSection.style.minHeight = "45px";
-        quickFiltersSection.style.display = "block";
+        [
+            createFilterCategory("Control",
+            [
+                createGenericButton("Reset", resetAuctionItemsDisplay),
+                createGenericButton("My Bids", filterMyBids),
+            ]),
 
-        const filterCategoriesContainer = document.createElement("div");
-        filterCategoriesContainer.setAttribute("id", "filterCategoriesContainer");
-        filterCategoriesContainer.style.display = "block flex";
+            createFilterCategory("Prefix",
+            [
+                createSubCategory("Low (1-30)"),
+                createFilterButton("Calódiens"),
+                createFilterButton("Sugos"),
+                createFilterButton("Uróthiens"),
+                createFilterButton("Rayols"),
+                createSubCategory("Mid (30-60)"),
+                createFilterButton("Zeindras"),
+                createFilterButton("Kerrannas"),
+                createFilterButton("Táliths"),
+                createFilterButton("Trafans"),
+                createSubCategory("High (80-100)"),
+                createFilterButton("Ichorus"),
+                createFilterButton("Lucius"),
+                createFilterButton("Gaius"),
+                createFilterButton("Antonius"),
+                createSubCategory("End (100+)"),
+                createFilterButton("Sebastianus"),
+                createFilterButton("Gratius"),
+                createFilterButton("Gaias"),
+            ]),
 
-        const controlCategory = document.createElement("div");
-        controlCategory.setAttribute("id", "filterControlCategory");
-        controlCategory.style.display = "grid";
-        controlCategory.appendChild(createResetButton());
-        controlCategory.appendChild(createMyBidsButton());
+            createFilterCategory("Suffix",
+            [
+                createFilterButton("Delicacy"),
+                createFilterButton("Conflict"),
+                createFilterButton("Assassination"),
+                createFilterButton("Heaven"),
+                createFilterButton("Earth")
+            ]),
 
-        const prefixCategory = document.createElement("div");
-        prefixCategory.setAttribute("id", "filterPrefixCategory");
-        prefixCategory.style.display = "grid";
-        prefixCategory.appendChild(createFilterButton("Lothays"));
-        prefixCategory.appendChild(createFilterButton("Bacias"));
-        prefixCategory.appendChild(createFilterButton("Sugos"));
-        prefixCategory.appendChild(createFilterButton("Uróthiens"));
-        prefixCategory.appendChild(createFilterButton("Táliths"));
-        prefixCategory.appendChild(createFilterButton("Opiehnzas"));
-        prefixCategory.appendChild(createFilterButton("Lucius"));
-        prefixCategory.appendChild(createFilterButton("Ichorus"));
+            createFilterCategory("Mercenary",
+            [
+                createFilterButton("Samnit"),
+                createFilterButton("Murmillo"),
+                createFilterButton("Elite Spear"),
+                createSubCategory("Misc"),
+                createFilterButton("Grindstone")
+            ]),
 
+            createFilterCategory("Presets",
+            [
+                createFilterButton("Antonius Assassination"),
+            ]),
+        ].forEach(category => { quickFiltersSectionCategoriesContainer.appendChild(category) });
 
-        const suffixCategory = document.createElement("div");
-        suffixCategory.setAttribute("id", "filterSuffixCategory");
-        suffixCategory.style.display = "grid";
-        suffixCategory.appendChild(createFilterButton("Delicacy"));
-        suffixCategory.appendChild(createFilterButton("Conflict"));
-        suffixCategory.appendChild(createFilterButton("Assassination"));
-        suffixCategory.appendChild(createFilterButton("Heaven"));
-        suffixCategory.appendChild(createFilterButton("Solitude"));
-
-        const mercenaryCategory = document.createElement("div");
-        mercenaryCategory.setAttribute("id", "filterMercenaryCategory");
-        mercenaryCategory.style.display = "grid";
-        mercenaryCategory.appendChild(createFilterButton("Samnit"));
-        mercenaryCategory.appendChild(createFilterButton("Murmillo"));
-        mercenaryCategory.appendChild(createFilterButton("Elite Spear"));
-
-        const miscCategory = document.createElement("div");
-        miscCategory.setAttribute("id", "filterMiscCategory");
-        miscCategory.style.display = "grid";
-        miscCategory.appendChild(createFilterButton("Grindstone"));
-
-
-        filterCategoriesContainer.appendChild(controlCategory);
-        filterCategoriesContainer.appendChild(prefixCategory);
-        filterCategoriesContainer.appendChild(suffixCategory);
-        filterCategoriesContainer.appendChild(mercenaryCategory);
-        filterCategoriesContainer.appendChild(miscCategory);
-
-        quickFiltersSection.appendChild(filterCategoriesContainer);
+        quickFiltersSection.appendChild(quickFiltersSectionCategoriesContainer);
 
         const auctionControls = document.querySelector("#content article");
-        auctionControls.appendChild(quickFilterSectionHeader);
+        auctionControls.appendChild(quickFiltersSectionHeader);
         auctionControls.appendChild(quickFiltersSection);
     }
 
-    const HOST = `https://${window.location.host}/game/index.php?`;
+    // const HOST = `https://${window.location.host}/game/index.php?`;
 
-    const TOKEN = getQueryParameterValue("sh");
+    // const TOKEN = getQueryParameterValue("sh");
 
     setTimeout(() => {
         // clean useless text
