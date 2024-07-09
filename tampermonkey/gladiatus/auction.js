@@ -176,6 +176,58 @@
     }
 
 
+    // Other functions
+    function mercDisplayAttr() {
+        const auctionItems = document.querySelectorAll(".auction_item_div");
+        auctionItems.forEach(item => {
+            let isMerc = false;
+            let isDexMerc = false;
+            let isAgiMerc = false;
+            let str = 0;
+            let dex = 0;
+            let agi = 0;
+            let con = 0;
+            let cha = 0;
+            let int = 0;
+            let info = "";
+            eval(item.children[0].children[0].dataset.tooltip)[0].flat().forEach(strng => {
+                if (typeof strng == "string"){
+                    if (strng.contains("Samnit") || strng.contains("Murmillo")){
+                        // isMerc = true;
+                        isDexMerc = true;
+                    }
+                    if (strng.contains("Elite Spear")){
+                        isAgiMerc = true;
+                    }
+                    if (strng.contains("Strength")){
+                        str = strng.match(/\d+/);
+                    }
+                    if (strng.contains("Dexterity")){
+                        dex = strng.match(/\d+/);
+                    }
+                    if (strng.contains("Agility")){
+                        agi = strng.match(/\d+/);
+                    }
+                    if (strng.contains("Constitution")){
+                        con = strng.match(/\d+/);
+                    }
+                    if (strng.contains("Charisma")){
+                        cha = strng.match(/\d+/);
+                    }
+                    if (strng.contains("Intelligence")){
+                        int = strng.match(/\d+/);
+                    }
+                }
+            });
+            if (isDexMerc || isAgiMerc) {
+                const bidDiv = item.parentNode.querySelector(".auction_bid_div");
+                info = `${isDexMerc ? dex : agi} ${bidDiv.children[2].innerText}`;
+                bidDiv.children[2].innerText = info;
+            }
+        });
+    }
+
+
     function addQuickFilters() {
         const quickFiltersSection = createSection("Quick Filters Section");
         const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, nameToID("Quick Filters Section")));
@@ -184,6 +236,7 @@
         quickFiltersSectionCategoriesContainer.setAttribute("id", nameToID("Filter categories container"));
         quickFiltersSectionCategoriesContainer.style.display = "flex";
         quickFiltersSectionCategoriesContainer.style.flexDirection = "row";
+        quickFiltersSectionCategoriesContainer.style.justifyContent = "space-evenly";
         quickFiltersSectionCategoriesContainer.style.columnGap = "0.125rem";
         quickFiltersSectionCategoriesContainer.style.margin = "0.125rem";
 
@@ -220,10 +273,13 @@
             createFilterCategory("Suffix",
             [
                 createFilterButton("Delicacy"),
-                createFilterButton("Conflict"),
-                createFilterButton("Assassination"),
+                createFilterButton("Elimination"),
+                createFilterButton("Aggression"),
+                createFilterButton("Earth"),
+                createFilterButton("Dragon"),
+                createFilterButton("Gloom"),
+                createFilterButton("Inferno"),
                 createFilterButton("Heaven"),
-                createFilterButton("Earth")
             ]),
 
             createFilterCategory("Mercenary",
@@ -259,6 +315,7 @@
         });
 
         addQuickFilters();
+        mercDisplayAttr();
 
         // paint auction item boxes
         setInterval(() => {
@@ -270,7 +327,7 @@
 
                 const noBidsTest = bidItem.firstElementChild;
                 if (noBidsTest) {
-                    noBids = noBidsTest.innerText.contains("No bids");
+                    noBids = noBidsTest.innerText.contains("No bids");1
                     myBidNoRefresh = noBidsTest.innerText.contains("Your bid has been placed");
                 }
 
@@ -291,5 +348,5 @@
                 friendlyBidder || myBidNoRefresh ? bidBox.style.backgroundColor = "lightgreen" : null;
             });
         }, 500);
-    }, 250);
+    }, 500);
 })();

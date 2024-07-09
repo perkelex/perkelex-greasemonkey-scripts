@@ -17,8 +17,8 @@
         "caravan", // big account expedition
         "fairground", // big account dungeon
         "opponents at expeditions",
-        "bridge", // small account expedition
-        "poisoned country", // small account dungeon
+        "cursed village", // small account expedition
+        "viking camp", // small account dungeon
     ]
     const questsToRemoveAnyway = [
         "defeat each opponent at least once",

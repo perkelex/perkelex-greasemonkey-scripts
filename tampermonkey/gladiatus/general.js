@@ -11,6 +11,11 @@
 (function() {
     'use strict';
 
+    function disableMouseOverMenu() {
+        document.querySelectorAll(".menutab_city").forEach(menutab => { menutab.onmouseover = null });
+        document.querySelectorAll(".menutab_country").forEach(menutab => { menutab.onmouseover = null });
+    }
+
     function paintAuctionStatus(auction) {
         ["very long", "long"].some(duration => auction.textContent.toLowerCase().contains(duration)) ? auction.style.backgroundColor = "red" : null;
         ["middle"].some(duration => auction.textContent.toLowerCase().contains(duration)) ? auction.style.backgroundColor = "orange" : null;
@@ -31,6 +36,9 @@
 
             paintAuctionStatus(gladiator);
             paintAuctionStatus(mercenary);
+
+            document.querySelectorAll("#chatFulldiv").forEach(chat => { chat.remove(); });
+            disableMouseOverMenu();
 
                 // noBids ? bidBox.style.backgroundColor = "lightgrey" : null;
                 // unknownBidder ? bidBox.style.backgroundColor = "#FFCCCB" : null;
