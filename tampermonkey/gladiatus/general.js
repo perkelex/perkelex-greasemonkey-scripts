@@ -30,19 +30,17 @@
 
             gladiator.style.color = "black";
             gladiator.style.textShadow = "none";
+            gladiator.style.fontWeight = "bold";
 
             mercenary.style.color = "black";
             mercenary.style.textShadow = "none";
+            mercenary.style.fontWeight = "bold";
 
             paintAuctionStatus(gladiator);
             paintAuctionStatus(mercenary);
 
             document.querySelectorAll("#chatFulldiv").forEach(chat => { chat.remove(); });
-            disableMouseOverMenu();
-
-                // noBids ? bidBox.style.backgroundColor = "lightgrey" : null;
-                // unknownBidder ? bidBox.style.backgroundColor = "#FFCCCB" : null;
-                // friendlyBidder || myBidNoRefresh ? bidBox.style.backgroundColor = "lightgreen" : null;
+            // disableMouseOverMenu();
         }, 500);
     }, 500);
 })();

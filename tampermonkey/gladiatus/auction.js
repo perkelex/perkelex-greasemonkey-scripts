@@ -21,6 +21,42 @@
         return urlParams.get(param);
     }
 
+    const gcaSortMapping = {
+        "Damage": "damage",
+        "Armor": "armour",
+        "Strength": "strength",
+        "Agility": "agility",
+        "Dexterity": "dexterity",
+        "Constitution": "constitution",
+        "Intelligence": "intelligence",
+        "Charisma": "charisma",
+        "Healing": "healing",
+        "Life": "life",
+        "Threat": "threat",
+        "Level": "level",
+        "Health": "10410197108116104",
+        "Hardening": "104971141001011101051101034511897108117101",
+        "Using": "11711510511010358",
+        "Critical attack": "991141051161059997108459711611697991074511897108117101",
+        "From intelligence": "102114111109451051101161011081081051031011109910158",
+        "Block": "98108111991074511897108117101",
+    }
+
+    class State{
+        static currentFilter = null;
+
+        static isFilteredBy(filter) {
+            return this.currentFilter === filter;
+        }
+
+        static setFilter(filter) {
+            this.currentFilter = filter;
+        }
+
+        static resetFilter() {
+            this.currentFilter = null
+        }
+    }
 
     // Utils
     function nameToID(name) {
@@ -36,6 +72,14 @@
 
     function filterContent(content) {
         resetAuctionItemsDisplay();
+
+        if (State.isFilteredBy(content)) {
+            State.resetFilter();
+            return
+        }
+
+        State.setFilter(content);
+
         const auctionTable = document.querySelector("#auction_table");
 
         // hide unwanted table cells
@@ -56,6 +100,14 @@
 
     function multiFilterContent() {
         resetAuctionItemsDisplay();
+
+        if (State.isFilteredBy(Array.from(arguments).join(" "))) {
+            State.resetFilter();
+            return
+        }
+
+        State.setFilter(Array.from(arguments).join(" "));
+
         const auctionTable = document.querySelector("#auction_table");
 
         // hide unwanted table cells
@@ -103,6 +155,14 @@
         });
     }
 
+    function fillAndSortGCA(criteria){
+        const sortSelect = document.querySelector("#gca-auction-sort-select");
+        const sortButton = document.querySelector(".gca-auction-sort-button");
+
+        sortSelect.value = gcaSortMapping[criteria];
+        sortButton.click();
+    }
+
     function showHideElement(elementID) {
         const element = document.querySelector(`#${elementID}`);
         element.style.display.contains("block") ? element.style.display = "none" : element.style.display = "block";
@@ -110,18 +170,29 @@
 
 
     // Generators
-    function createGenericButton(content, action) {
+    function createGenericButton(content, type){
         const button = document.createElement("button");
-        button.setAttribute("id", `${content.toLowerCase().replaceAll(" ", "-")}-filter`);
+        button.setAttribute("id", `${content.toLowerCase().replaceAll(" ", "-")}-${type.toLowerCase()}`);
         button.appendChild(document.createTextNode(`${content}`));
         button.className += "awesome-button";
         button.style.margin = "0rem 0.25rem";
+        return button;
+    }
+
+    function createGenericFilterButton(content, action) {
+        const button = createGenericButton(content, "filter");
         button.addEventListener("click", action);
         return button;
     }
 
+    function createSortButton(content, action = fillAndSortGCA) {
+        const button = createGenericButton(content, "sort");
+        button.addEventListener("click", action.bind(this, content));
+        return button;
+    }
+
     function createFilterButton(content) {
-        const contentFilterButton = createGenericButton(content, content.contains(" ") ? multiFilterContent.bind(this, content.split(" ")) : filterContent.bind(this, content));
+        const contentFilterButton = createGenericFilterButton(content, content.contains(" ") ? multiFilterContent.bind(this, content.split(" ")) : filterContent.bind(this, content));
 
         return contentFilterButton;
     }
@@ -174,7 +245,6 @@
         section.style.display = "block";
         return section;
     }
-
 
     // Other functions
     function mercDisplayAttr() {
@@ -240,11 +310,11 @@
         quickFiltersSectionCategoriesContainer.style.columnGap = "0.125rem";
         quickFiltersSectionCategoriesContainer.style.margin = "0.125rem";
 
-        [
+        const neededThisToCollapseTheListLoL = [
             createFilterCategory("Control",
             [
-                createGenericButton("Reset", resetAuctionItemsDisplay),
-                createGenericButton("My Bids", filterMyBids),
+                createGenericFilterButton("Reset", resetAuctionItemsDisplay),
+                createGenericFilterButton("My Bids", filterMyBids),
             ]),
 
             createFilterCategory("Prefix",
@@ -254,11 +324,12 @@
                 createFilterButton("Sugos"),
                 createFilterButton("Uróthiens"),
                 createFilterButton("Rayols"),
-                createSubCategory("Mid (30-60)"),
+                createSubCategory("Mid (30-70)"),
                 createFilterButton("Zeindras"),
                 createFilterButton("Kerrannas"),
                 createFilterButton("Táliths"),
                 createFilterButton("Trafans"),
+                createFilterButton("Opiehnzas"),
                 createSubCategory("High (80-100)"),
                 createFilterButton("Ichorus"),
                 createFilterButton("Lucius"),
@@ -273,6 +344,7 @@
             createFilterCategory("Suffix",
             [
                 createFilterButton("Delicacy"),
+                createFilterButton("Suffering"),
                 createFilterButton("Elimination"),
                 createFilterButton("Aggression"),
                 createFilterButton("Earth"),
@@ -304,6 +376,35 @@
         auctionControls.appendChild(quickFiltersSection);
     }
 
+    function overwriteGCASortSection() {
+        const watchForSortSection = setInterval(() => {
+            const sortSection = document.querySelector("#gca-auction-sort-section");
+            if (sortSection) {
+                clearInterval(watchForSortSection);
+
+                const sortForm = sortSection.querySelector("form");
+                sortForm.style.display = "none";
+
+                const sortSectionContainer = document.createElement("div");
+                sortSectionContainer.setAttribute("id", nameToID("Sort categories container"));
+                sortSectionContainer.style.display = "flex";
+                sortSectionContainer.style.flexDirection = "row";
+                sortSectionContainer.style.justifyContent = "space-evenly";
+                sortSectionContainer.style.margin = "0.25rem";
+
+                sortSection.appendChild(sortSectionContainer);
+
+                const collapseLoL = [
+                    createSortButton("Damage"),
+                    createSortButton("Agility"),
+                    createSortButton("Dexterity"),
+                    createSortButton("Healing"),
+                    createSortButton("Block"),
+                ].forEach(button => { sortSectionContainer.appendChild(button) });
+            }
+        }, 100);
+    }
+
     // const HOST = `https://${window.location.host}/game/index.php?`;
 
     // const TOKEN = getQueryParameterValue("sh");
@@ -314,6 +415,7 @@
             paragraph.textContent.contains("If someone overbids you you do") ? paragraph.style.display = "none" : null;
         });
 
+        overwriteGCASortSection();
         addQuickFilters();
         mercDisplayAttr();
 

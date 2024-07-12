@@ -14,11 +14,11 @@
     const questsToKeep = [
         "turma",
         "items",
-        "caravan", // big account expedition
-        "fairground", // big account dungeon
+        "mesoai-oasis", // s69 expedition
+        "Under a Blood-red Sky", // s69 dungeon
         "opponents at expeditions",
-        "cursed village", // small account expedition
-        "viking camp", // small account dungeon
+        "ancient temple", // s70 expedition
+        "viking camp", // s70 dungeon
     ]
     const questsToRemoveAnyway = [
         "defeat each opponent at least once",
@@ -32,13 +32,13 @@
             const questTitle = quest.querySelector(".quest_slot_title").textContent.toLowerCase();
 
             for (const keepKeyword of questsToKeep) {
-                if (questTitle.contains(keepKeyword)) {
+                if (questTitle.contains(keepKeyword.toLowerCase())) {
                     iWantItGone = false;
                 }
             }
 
             for (const removeAnywayKeyword of questsToRemoveAnyway) {
-                if (questTitle.contains(removeAnywayKeyword)) {
+                if (questTitle.contains(removeAnywayKeyword.toLowerCase())) {
                     iWantItGone = true;
                 }
             }
