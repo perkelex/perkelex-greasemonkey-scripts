@@ -18,7 +18,7 @@
         "Under a Blood-red Sky", // s69 dungeon
         "opponents at expeditions",
         "ancient temple", // s70 expedition
-        "viking camp", // s70 dungeon
+        "In Enemy Hands", // s70 dungeon
     ]
     const questsToRemoveAnyway = [
         "defeat each opponent at least once",

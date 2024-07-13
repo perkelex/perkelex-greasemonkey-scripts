@@ -13,7 +13,7 @@
 
     // Misc
     function print() {
-        console.log(arguments);
+        Array.from(arguments).forEach(argument => { console.log(argument) });
     }
 
     function getQueryParameterValue(param) {
@@ -58,6 +58,10 @@
         }
     }
 
+    class Flags{
+        static filterToggle = false;
+    }
+
     // Utils
     function nameToID(name) {
         return name.toLowerCase().replaceAll(" ", "-");
@@ -73,7 +77,7 @@
     function filterContent(content) {
         resetAuctionItemsDisplay();
 
-        if (State.isFilteredBy(content)) {
+        if (Flags.filterToggle && State.isFilteredBy(content)) {
             State.resetFilter();
             return
         }
@@ -101,7 +105,7 @@
     function multiFilterContent() {
         resetAuctionItemsDisplay();
 
-        if (State.isFilteredBy(Array.from(arguments).join(" "))) {
+        if (Flags.filterToggle && State.isFilteredBy(Array.from(arguments).join(" "))) {
             State.resetFilter();
             return
         }
@@ -124,6 +128,27 @@
                 tr.style.display = "none";
             }
         });
+    }
+
+    function customFilter(complexCriteriaList){
+        resetAuctionItemsDisplay();
+
+        const auctionTable = document.querySelector("#auction_table");
+
+            // hide unwanted table cells
+            auctionTable.querySelectorAll("td").forEach(td => {
+                const form = td.querySelector("form");
+                if (form && !Array.from(complexCriteriaList).some(criteria => criteria.every(term => form.dataset.item_name.toLowerCase().contains(term.toLowerCase())))) {
+                    td.style.display = "none";
+                }
+            });
+
+            // hide empty table rows
+            auctionTable.querySelectorAll("tr").forEach(tr => {
+                if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+                    tr.style.display = "none";
+                }
+            });
     }
 
     function filterMyBids() {
@@ -195,6 +220,14 @@
         const contentFilterButton = createGenericFilterButton(content, content.contains(" ") ? multiFilterContent.bind(this, content.split(" ")) : filterContent.bind(this, content));
 
         return contentFilterButton;
+    }
+
+    // complexCriteria looks like [[ ["lucius", "delicacy"], ["ichorus", "assasination"], ...]]
+    // doubling list because bind acts strange
+    function createCustomFilterButton(title, complexCriteria) {
+        const customFilterButton = createGenericButton(title, "filter");
+        customFilterButton.addEventListener("click", customFilter.bind(this, [complexCriteria]));
+        return customFilterButton;
     }
 
     function createFilterCategory(title, children){
@@ -324,17 +357,20 @@
                 createFilterButton("Sugos"),
                 createFilterButton("Uróthiens"),
                 createFilterButton("Rayols"),
+
                 createSubCategory("Mid (30-70)"),
                 createFilterButton("Zeindras"),
                 createFilterButton("Kerrannas"),
                 createFilterButton("Táliths"),
                 createFilterButton("Trafans"),
                 createFilterButton("Opiehnzas"),
+
                 createSubCategory("High (80-100)"),
                 createFilterButton("Ichorus"),
                 createFilterButton("Lucius"),
                 createFilterButton("Gaius"),
                 createFilterButton("Antonius"),
+
                 createSubCategory("End (100+)"),
                 createFilterButton("Sebastianus"),
                 createFilterButton("Gratius"),
@@ -344,14 +380,20 @@
             createFilterCategory("Suffix",
             [
                 createFilterButton("Delicacy"),
-                createFilterButton("Suffering"),
                 createFilterButton("Elimination"),
-                createFilterButton("Aggression"),
+                createFilterButton("Assassination"),
                 createFilterButton("Earth"),
-                createFilterButton("Dragon"),
-                createFilterButton("Gloom"),
                 createFilterButton("Inferno"),
                 createFilterButton("Heaven"),
+                createFilterButton("Solitude"),
+                createFilterButton("Conflict"),
+
+                createSubCategory("Level 90"),
+                createFilterButton("Delicacy"),
+                createFilterButton("Assassination"),
+                createFilterButton("Conflict"),
+                createFilterButton("Heaven"),
+                createFilterButton("Solitude"),
             ]),
 
             createFilterCategory("Mercenary",
@@ -359,13 +401,57 @@
                 createFilterButton("Samnit"),
                 createFilterButton("Murmillo"),
                 createFilterButton("Elite Spear"),
+
                 createSubCategory("Misc"),
                 createFilterButton("Grindstone")
             ]),
 
             createFilterCategory("Presets",
             [
-                createFilterButton("Antonius Assassination"),
+                createFilterButton("Lucius Assassination"),
+                createFilterButton("Lucius Delicacy"),
+                createFilterButton("Ichorus Assassination"),
+                createFilterButton("Gaius Conflict"),
+                createFilterButton("Opiehnzas Heaven"),
+                createFilterButton("Táliths Solitude"),
+                createSubCategory("Complex filters"),
+                createCustomFilterButton("Level 90 gear",
+                    [
+                        ["lucius", "assassination"],
+                        ["lucius", "delicacy"],
+                        ["Ichorus", "assassination"],
+                        ["gaius", "conflict"],
+                        ["Opiehnzas", "heaven"],
+                        ["Táliths", "solitude"],
+                    ]
+                ),
+                createCustomFilterButton("Smelt Prefix",
+                    [
+                        ["lucius"],
+                        ["Ichorus"],
+                        ["gaius"],
+                        ["Opiehnzas"],
+                        ["Táliths"],
+                        ["Titanius"],
+                        ["Antonius"],
+                        ["Sebastianus"],
+                    ]
+                ),
+                createCustomFilterButton("Smelt Suffix",
+                    [
+                         ["assassination"],
+                         ["delicacy"],
+                        //  ["conflict"],
+                         ["heaven"],
+                         ["solitude"],
+                         ["alleluia"],
+                         ["earth"],
+                         ["elimination"],
+                         ["malice"],
+                         ["hell"],
+                         ["inferno"],
+                    ]
+                ),
             ]),
         ].forEach(category => { quickFiltersSectionCategoriesContainer.appendChild(category) });
 
@@ -374,6 +460,19 @@
         const auctionControls = document.querySelector("#content article");
         auctionControls.appendChild(quickFiltersSectionHeader);
         auctionControls.appendChild(quickFiltersSection);
+
+        document.querySelectorAll("#lucius-filter").forEach(item => { item.style.background = "#ffaa00"});
+        document.querySelectorAll("#ichorus-filter").forEach(item => { item.style.background = "#ffaa00"});
+        document.querySelectorAll("#opiehnzas-filter").forEach(item => { item.style.background = "#ffaa00"});
+        document.querySelectorAll("#táliths-filter").forEach(item => { item.style.background = "#ffaa00"});
+
+
+        // document.querySelectorAll("#assassination-filter").forEach(item => { item.style.background = "#ffaa00"});
+        // document.querySelectorAll("#delicacy-filter").forEach(item => { item.style.background = "#ffaa00"});
+        // document.querySelectorAll("#conflict-filter").forEach(item => { item.style.background = "#ffaa00"});
+        // document.querySelectorAll("#heaven-filter").forEach(item => { item.style.background = "#ffaa00"});
+        // document.querySelectorAll("#solitude-filter").forEach(item => { item.style.background = "#ffaa00"});
+
     }
 
     function overwriteGCASortSection() {
@@ -415,6 +514,8 @@
             paragraph.textContent.contains("If someone overbids you you do") ? paragraph.style.display = "none" : null;
         });
 
+        // addTotalCost();
+        // document.querySelectorAll(".auction_bid_div input[type='text']").forEach(input => {print(input.style.backgroundColor)})
         overwriteGCASortSection();
         addQuickFilters();
         mercDisplayAttr();
