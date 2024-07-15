@@ -42,6 +42,10 @@
         "Block": "98108111991074511897108117101",
     }
 
+    const mercCategoyMapping = {
+        "15": "test"
+    }
+
     class State{
         static currentFilter = null;
 
@@ -65,6 +69,57 @@
     // Utils
     function nameToID(name) {
         return name.toLowerCase().replaceAll(" ", "-");
+    }
+
+    class Mercenary {
+        static getTypeFromId(id) {
+            switch (id){
+                case "1":
+                case "6":
+                case "11":
+                case "16":
+                    return "Tank";
+                case "2":
+                case "7":
+                case "12":
+                case "17":
+                    return "Healer";
+                default:
+                    return "Damage";
+            }
+        }
+    }
+
+    class Items {
+        static getTypeFromId(id) {
+            switch(id){
+                case "1": return "Weapon";
+                case "2": return "Shield";
+                case "3": return "Chestplate";
+                case "4": return "Helmet";
+                case "5": return "Gloves";
+                case "6": return "Ring";
+                case "7": return "Usable";
+                case "8": return "Shoes";
+                case "9": return "Amulet";
+                case "11": return "Reinforcement";
+                case "12": return "Upgrade";
+                case "13": return "Recipe";
+                case "14": return "Gold";
+                case "15": return "Mercenary";
+                case "18": return "Forging goods";
+                case "19": return "Tools";
+                case "20": return "Scroll";
+                case "21": return "Event item";
+                default: null;
+            }
+        }
+
+        static getIdFromType(type) {
+            switch(type){
+                case "Mercenary": return "15";
+            }
+        }
     }
 
 
@@ -96,7 +151,7 @@
 
         // hide empty table rows
         auctionTable.querySelectorAll("tr").forEach(tr => {
-            if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+            if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
                 tr.style.display = "none";
             }
         });
@@ -124,7 +179,7 @@
 
         // hide empty table rows
         auctionTable.querySelectorAll("tr").forEach(tr => {
-            if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+            if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
                 tr.style.display = "none";
             }
         });
@@ -145,7 +200,7 @@
 
             // hide empty table rows
             auctionTable.querySelectorAll("tr").forEach(tr => {
-                if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+                if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
                     tr.style.display = "none";
                 }
             });
@@ -174,7 +229,7 @@
 
         // hide empty table rows
         auctionTable.querySelectorAll("tr").forEach(tr => {
-            if ([...tr.querySelectorAll("td")].every(td => td.style.display.contains("none"))) {
+            if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
                 tr.style.display = "none";
             }
         });
@@ -188,8 +243,8 @@
         sortButton.click();
     }
 
-    function showHideElement(elementID) {
-        const element = document.querySelector(`#${elementID}`);
+    function showHideElement(element) {
+        // const element = document.querySelector(`#${elementID}`);
         element.style.display.contains("block") ? element.style.display = "none" : element.style.display = "block";
     }
 
@@ -282,58 +337,55 @@
     // Other functions
     function mercDisplayAttr() {
         const auctionItems = document.querySelectorAll(".auction_item_div");
-        auctionItems.forEach(item => {
-            let isMerc = false;
-            let isDexMerc = false;
-            let isAgiMerc = false;
-            let str = 0;
-            let dex = 0;
-            let agi = 0;
-            let con = 0;
-            let cha = 0;
-            let int = 0;
-            let info = "";
-            eval(item.children[0].children[0].dataset.tooltip)[0].flat().forEach(strng => {
-                if (typeof strng == "string"){
-                    if (strng.contains("Samnit") || strng.contains("Murmillo")){
-                        // isMerc = true;
-                        isDexMerc = true;
+        auctionItems.forEach(auctionItem => {
+            const mercItem = Array.from(auctionItem.querySelector("div").querySelector("div")).filter(itemType => itemType.classList[0].split("-")[2].contains(Items.getIdFromType("Mercenary")));
+
+            mercItem.forEach(item => {
+                let str = 0;
+                let dex = 0;
+                let agi = 0;
+                let con = 0;
+                let cha = 0;
+                let int = 0;
+                let info = "";
+                eval(item.dataset.tooltip)[0].flat().forEach(attribute => {
+                    if (typeof attribute == "string"){
+                        attribute.contains("Strength") ? str = attribute.match(/\d+/) : null;
+                        attribute.contains("Dexterity") ? dex = attribute.match(/\d+/) : null;
+                        attribute.contains("Agility") ? agi = attribute.match(/\d+/) : null;
+                        attribute.contains("Constitution") ? con = attribute.match(/\d+/) : null;
+                        attribute.contains("Charisma") ? cha = attribute.match(/\d+/) : null;
+                        attribute.contains("Intelligence") ? int = attribute.match(/\d+/) : null;
                     }
-                    if (strng.contains("Elite Spear")){
-                        isAgiMerc = true;
-                    }
-                    if (strng.contains("Strength")){
-                        str = strng.match(/\d+/);
-                    }
-                    if (strng.contains("Dexterity")){
-                        dex = strng.match(/\d+/);
-                    }
-                    if (strng.contains("Agility")){
-                        agi = strng.match(/\d+/);
-                    }
-                    if (strng.contains("Constitution")){
-                        con = strng.match(/\d+/);
-                    }
-                    if (strng.contains("Charisma")){
-                        cha = strng.match(/\d+/);
-                    }
-                    if (strng.contains("Intelligence")){
-                        int = strng.match(/\d+/);
-                    }
+                });
+
+                const auctionTd = auctionItem.parentNode.parentNode.parentNode;
+
+                const mercType = Mercenary.getTypeFromId(item.classList[0].split("-")[3]);
+                const bidDiv = auctionItem.parentNode.querySelector(".auction_bid_div");
+                switch (mercType){
+                    case "Tank":
+                        // agi >= 360 ? auctionTd.style.display = "none" : auctionTd.style.display = "table-cell";
+                        info = `${agi} ${bidDiv.children[2].innerText}`;
+                        break;
+                    case "Healer":
+                        // int >= 360 ? auctionTd.style.display = "none" : auctionTd.style.display = "table-cell";
+                        info = `${int} ${bidDiv.children[2].innerText}`;
+                        break;
+                    case "Damage":
+                        // dex >= 360 ? auctionTd.style.display = "none" : auctionTd.style.display = "table-cell";
+                        info = `${dex} ${bidDiv.children[2].innerText}`;
+                        break;
                 }
-            });
-            if (isDexMerc || isAgiMerc) {
-                const bidDiv = item.parentNode.querySelector(".auction_bid_div");
-                info = `${isDexMerc ? dex : agi} ${bidDiv.children[2].innerText}`;
                 bidDiv.children[2].innerText = info;
-            }
+            })
         });
     }
 
 
     function addQuickFilters() {
         const quickFiltersSection = createSection("Quick Filters Section");
-        const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, nameToID("Quick Filters Section")));
+        const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, quickFiltersSection));
 
         const quickFiltersSectionCategoriesContainer = document.createElement("div");
         quickFiltersSectionCategoriesContainer.setAttribute("id", nameToID("Filter categories container"));
@@ -368,8 +420,12 @@
                 createSubCategory("High (80-100)"),
                 createFilterButton("Ichorus"),
                 createFilterButton("Lucius"),
+                createFilterButton("Titus"),
+                createFilterButton("Sextus"),
                 createFilterButton("Gaius"),
+                createFilterButton("Mandalus"),
                 createFilterButton("Antonius"),
+                createFilterButton("Constantinus"),
 
                 createSubCategory("End (100+)"),
                 createFilterButton("Sebastianus"),
@@ -398,9 +454,29 @@
 
             createFilterCategory("Mercenary",
             [
+                createCustomFilterButton("Tank", [
+                    ["Hoplomachus"], // Italy
+                    ["Elite Spear Carrier"], // Africa
+                    ["Eagle Wing"], // Germania
+                    ["Grandmaster"], // Britannia
+                ]),
+                createCustomFilterButton("Healer", [
+                    ["Medicus"], // Italy
+                    ["Medicine man"], // Africa
+                    ["Herbalist"], // Germania
+                    ["Druid Master"], // Britannia
+                ]),
+                createCustomFilterButton("Damage", [
+                    ["Thracian"], ["Murmillo"], ["Samnit"], // Italy
+                    ["Archer"], ["Experienced archer"], ["Sword Wolf"], // Africa
+                    ["Bear Warrior"], ["Scorpion Warrior"], ["Axe Warrior"], // Germania
+                    ["The Ranger"], ["Axe Thrower"], ["Chariot Driver"], // Britannia
+                ]),
+                createSubCategory("Specific"),
                 createFilterButton("Samnit"),
                 createFilterButton("Murmillo"),
                 createFilterButton("Elite Spear"),
+                createFilterButton("Grandmaster"),
 
                 createSubCategory("Misc"),
                 createFilterButton("Grindstone")
@@ -513,6 +589,9 @@
         document.querySelectorAll("p").forEach(paragraph => {
             paragraph.textContent.contains("If someone overbids you you do") ? paragraph.style.display = "none" : null;
         });
+
+        document.querySelector("#content > article").style.margin = "1rem 0rem";
+        document.querySelector("h2.buildingDesc.section-header").style.margin = "1rem 0rem";
 
         // addTotalCost();
         // document.querySelectorAll(".auction_bid_div input[type='text']").forEach(input => {print(input.style.backgroundColor)})
