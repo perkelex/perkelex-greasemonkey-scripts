@@ -12,15 +12,26 @@
     'use strict';
 
     const questsToKeep = [
-        "turma",
-        "items",
-        "mesoai-oasis", // s69 expedition
-        "Under a Blood-red Sky", // s69 dungeon
-        "opponents at expeditions",
+        // arenas
+        /turma/i,
+        /arena/i,
+        /provinciarum/i,
+
+        // grind
+        /caravan/i, // s69 expedition
+        /In the Heart of Decay/i, //s69 dungeon
+
+        /grimwood/i,
+        /opponents at expeditions/i,
+
+        //misc
+        /items/i,
     ]
     const questsToRemoveAnyway = [
-        "defeat each opponent at least once",
-        "succession"
+        /defeat each opponent at least once/i,
+        /succession/i,
+        /defeat [0-9]+/i,
+        /In the Heart of Decay: Defeat the boss in this dungeon/i,
     ]
 
     setTimeout(() => {
@@ -34,14 +45,14 @@
 
             const questTitle = quest.querySelector(".quest_slot_title").textContent.toLowerCase();
 
-            for (const keepKeyword of questsToKeep) {
-                if (questTitle.contains(keepKeyword.toLowerCase())) {
+            for (const keepRegEx of questsToKeep) {
+                if (questTitle.match(keepRegEx)) {
                     iWantItGone = false;
                 }
             }
 
-            for (const removeAnywayKeyword of questsToRemoveAnyway) {
-                if (questTitle.contains(removeAnywayKeyword.toLowerCase())) {
+            for (const removeAnywayRegEx of questsToRemoveAnyway) {
+                if (questTitle.match(removeAnywayRegEx)) {
                     iWantItGone = true;
                 }
             }

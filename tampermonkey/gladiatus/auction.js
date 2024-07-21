@@ -42,6 +42,199 @@
         "Block": "98108111991074511897108117101",
     }
 
+    const recipes = {
+
+    }
+
+    const mainMaterialOnSmelt = {
+        "Linen Strip": { "Tinothiels": 7, "Calódiens": 8,
+            "Tanias": 14,
+            "Uróthiens": 13,
+            "Doitrems": 5,
+            "Chalinis": 9,
+            "Asendacs": 14,
+            "Grasscrawlers": 10,
+            "Isundels": 10,
+            "Mooncruchers": 11,
+            "Cisiens": 13,
+            "Galarands": 10,
+        },
+        "Fang": {
+            "Amoviels": 10,
+            "Vuthiels": 10,
+            "Frabos": 10,
+            "Lothays": 11,
+            "Rayols": 12,
+            "Umilawens": 5,
+            "Kedyssis": 12,
+            "Bacias": 12,
+            "Gonaks": 10,
+            "Beasthammers": 19,
+            "Chabdyns": 18,
+        },
+        "Silk Thread": {
+            "Kosmonas": 7,
+            "Mimas": 5,
+            "Umilawens": 5,
+            "Rynightes": 7,
+            "Zeindras": 6,
+        },
+        "Hemp": {
+            "Reinkes": 9,
+            "Solitanis": 13,
+            "Elywens": 8,
+            "Ismaels": 13,
+            "Demonkillers": 8,
+        },
+        "Jute Patch": {
+            "Zickezackes": 10,
+            "Gadriewens": 8,
+            "Xus": 12,
+            "Frientas": 9,
+            "Kerrannas": 6,
+        },
+        "Wool": {
+            "Mermereus": 11,
+            "Doitrems": 5,
+            "Umilawens": 5,
+            "Skiterus": 11,
+            "Elrarangs": 19,
+            "Lurtscharas": 15,
+        },
+        "Flintstone": {
+            "Orleds": 21,
+            "Adendathiels": 16,
+            "Ashitills": 13,
+            "Ashitills": 17,
+        },
+        "Lapis Lazuli": {
+            "Melanchaetas": 13,
+            "Ronaldas": 18,
+            "Fustriels": 13,
+        },
+        "Adrenaline": {
+            "Bereccas": 22,
+            "Fitschis": 20,
+            "Medonis": 22,
+            "Heuhois": 19,
+        },
+        "Scale": {
+            "Umfetas": 12,
+            "Gidras": 20,
+            "Melaneos": 21,
+            "Zombers": 23,
+        },
+        "Storm Rune": {
+            "Xenphlames": 21,
+            "Umbros": 40,
+            "Opiehnzas": 18,
+            "Chucks": 23,
+            "Appius": 17,
+        },
+        "Garnet": {
+            "Liloels": 31,
+            "Purmanns": 25,
+            "Stoybaers": 29,
+            "Shivas": 35,
+            "Anchorons": 20,
+            "Marcus": 48,
+        },
+        "Bull's Horn": {
+            "Sphingens": 10,
+            "Barbekuus": 13,
+            "Leandronimus": 13,
+            "Thorstens": 33,
+            "Zimbris": 34,
+        },
+        "Tincture of Stamina": {
+            "Korks": 20,
+            "Fernabasts": 21,
+            "Sentarions": 24,
+            "Tantus": 21,
+            "Lucius": 27,
+        },
+        "Sulphur": {
+            "Trafans": 19,
+            "Jennifers": 29,
+            "Ichorus": 35,
+            "Decimus": 32,
+        },
+        "Potion of Perception": {
+            "Cheggovs": 30,
+        },
+        "Crystal": {
+            "Manius": 42,
+            "Titus": 29,
+            "Gaius": 31,
+            "Antonius": 30,
+            "Quintus": 25,
+            "Belisarius": 30,
+            "Pontius": 22,
+        },
+        "Amethyst": {
+            "Mateus": 48,
+            "Dexterus": 21,
+            "Servius": 31,
+            "Giganticus": 23,
+            "Marcellus": 36,
+            "Constantius": 27,
+            "Valerius": 47,
+            "Caldus\'": 24,
+        },
+        "Dragon Scale": {
+            "Dairus": 34,
+            "Sextus": 34,
+            "Tellus": 20,
+            "Lepidus": 30,
+            "Titanius": 23,
+            "Avalonius": 24,
+            "Amulius": 34,
+        },
+        "Emerald": {
+            "Spurius": 52,
+            "Mandalus": 52,
+            "Silvanus": 54,
+            "Vergilius": 56,
+            "Aurelius": 56,
+            "Caldus\'": 23,
+        },
+        "Sphinx Feather": {
+            "Lethe's": 33,
+            "Mercurialis": 47,
+            "Aulus": 35,
+        },
+        "Sugilite": {
+            "Asphodel's": 39,
+            "Joves": 40,
+            "Magnus": 44,
+            "Angelus": 47,
+            "Caesius": 44,
+            "Gratias": 47,
+        },
+        "Almandin": {
+            "Sebastianus": 24,
+            "Mycandrilles": 40,
+            "Ursus": 33,
+            "Primulus": 37,
+            "Sergius": 31,
+            "Gratius": 37,
+        },
+        "Typhon Leather": {
+            "Dragonus\'": 30,
+            "Oranius": 28,
+        },
+        "Hydra Scale": {
+            "Ambrosius\'": 26,
+            "Aspagius": 41,
+            "Pilatus": 41,
+        },
+        "Soul Essence": {
+            "Gaias": 55,
+            "Accas": 73,
+            "Quintas": 45,
+        },
+    }
+
     const mercCategoyMapping = {
         "15": "test"
     }
@@ -63,7 +256,7 @@
     }
 
     class Flags{
-        static filterToggle = false;
+        static quickFilterToggle = false;
     }
 
     // Utils
@@ -126,13 +319,13 @@
     // Functors
     function resetAuctionItemsDisplay() {
         document.querySelectorAll("#auction_table td").forEach(td => {td.style.display = "table-cell"});
-        document.querySelectorAll("#auction_table tr").forEach(td => {td.style.display = "table-row"});
+        document.querySelectorAll("#auction_table tr").forEach(tr => {tr.style.display = "table-row"});
     }
 
     function filterContent(content) {
         resetAuctionItemsDisplay();
 
-        if (Flags.filterToggle && State.isFilteredBy(content)) {
+        if (Flags.quickFilterToggle && State.isFilteredBy(content)) {
             State.resetFilter();
             return
         }
@@ -160,7 +353,7 @@
     function multiFilterContent() {
         resetAuctionItemsDisplay();
 
-        if (Flags.filterToggle && State.isFilteredBy(Array.from(arguments).join(" "))) {
+        if (Flags.quickFilterToggle && State.isFilteredBy(Array.from(arguments).join(" "))) {
             State.resetFilter();
             return
         }
@@ -190,20 +383,20 @@
 
         const auctionTable = document.querySelector("#auction_table");
 
-            // hide unwanted table cells
-            auctionTable.querySelectorAll("td").forEach(td => {
-                const form = td.querySelector("form");
-                if (form && !Array.from(complexCriteriaList).some(criteria => criteria.every(term => form.dataset.item_name.toLowerCase().contains(term.toLowerCase())))) {
-                    td.style.display = "none";
-                }
-            });
+        // hide unwanted table cells
+        auctionTable.querySelectorAll("td").forEach(td => {
+            const form = td.querySelector("form");
+            if (form && !Array.from(complexCriteriaList).some(criteria => criteria.every(term => form.dataset.item_name.toLowerCase().contains(term.toLowerCase())))) {
+                td.style.display = "none";
+            }
+        });
 
-            // hide empty table rows
-            auctionTable.querySelectorAll("tr").forEach(tr => {
-                if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
-                    tr.style.display = "none";
-                }
-            });
+        // hide empty table rows
+        auctionTable.querySelectorAll("tr").forEach(tr => {
+            if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
+                tr.style.display = "none";
+            }
+        });
     }
 
     function filterMyBids() {
@@ -212,8 +405,8 @@
 
         // hide unwanted table cells
         auctionTable.querySelectorAll("td").forEach(td => {
-            const myBidsWithRefresh = td.querySelector("div a span");
-            const myBidsWithoutRefresh = td.querySelector("div span");
+            const myBidsWithRefresh = td.querySelector(".auction_bid_div div a span");
+            const myBidsWithoutRefresh = td.querySelector(".auction_bid_div div");
             if (myBidsWithRefresh) {
                 if (!myBidsWithRefresh.style.color.contains("blue")) {
                     td.style.display = "none";
@@ -260,7 +453,7 @@
     }
 
     function createGenericFilterButton(content, action) {
-        const button = createGenericButton(content, "filter");
+        const button = createGenericButton(content, "quickfilter");
         button.addEventListener("click", action);
         return button;
     }
@@ -400,6 +593,8 @@
             [
                 createGenericFilterButton("Reset", resetAuctionItemsDisplay),
                 createGenericFilterButton("My Bids", filterMyBids),
+                createSubCategory("Auto"),
+                createGenericFilterButton("Food", bidFood),
             ]),
 
             createFilterCategory("Prefix",
@@ -435,15 +630,6 @@
 
             createFilterCategory("Suffix",
             [
-                createFilterButton("Delicacy"),
-                createFilterButton("Elimination"),
-                createFilterButton("Assassination"),
-                createFilterButton("Earth"),
-                createFilterButton("Inferno"),
-                createFilterButton("Heaven"),
-                createFilterButton("Solitude"),
-                createFilterButton("Conflict"),
-
                 createSubCategory("Level 90"),
                 createFilterButton("Delicacy"),
                 createFilterButton("Assassination"),
@@ -501,31 +687,59 @@
                         ["Táliths", "solitude"],
                     ]
                 ),
-                createCustomFilterButton("Smelt Prefix",
+                createSubCategory("Smelt"),
+                createCustomFilterButton("Tincture of Stamina (Lucius)",
                     [
                         ["lucius"],
-                        ["Ichorus"],
-                        ["gaius"],
-                        ["Opiehnzas"],
-                        ["Táliths"],
-                        ["Titanius"],
-                        ["Antonius"],
-                        ["Sebastianus"],
+                        ["fernabasts"],
+                        ["tantus"],
+                        ["sentarions"],
                     ]
                 ),
-                createCustomFilterButton("Smelt Suffix",
+                createCustomFilterButton("Crystal (Antonius)",
                     [
-                         ["assassination"],
-                         ["delicacy"],
-                        //  ["conflict"],
-                         ["heaven"],
-                         ["solitude"],
-                         ["alleluia"],
-                         ["earth"],
-                         ["elimination"],
-                         ["malice"],
-                         ["hell"],
-                         ["inferno"],
+                        ["manius"],
+                        ["gaius"],
+                        ["belisarius"],
+                        ["antonius"],
+                        ["titus"],
+                        ["quintus"],
+                        ["pontius"],
+                    ]
+                ),
+                createCustomFilterButton("Amethyst (Antonius)",
+                    [
+                        ["valerius"],
+                        ["mateus"],
+                        ["marcellus"],
+                        ["constantinus"],
+                        ["servius"],
+                        ["dexterus"],
+                        ["giganticus"],
+                    ]
+                ),
+                createCustomFilterButton("Sulphur (Ichorus)",
+                    [
+                        ["icorus"],
+                        ["decimus"],
+                        ["jennifers"],
+                        ["trafans"],
+                    ]
+                ),
+                createCustomFilterButton("Storm Rune (Opiehnzas)",
+                    [
+                        ["umbros"],
+                        ["chucks"],
+                        ["Xenphlames"],
+                        ["Appius"],
+                    ]
+                ),
+                createCustomFilterButton("Flintstone (Taliths)",
+                    [
+                        ["orleds"],
+                        ["Ashitills"],
+                        ["Táliths"],
+                        ["Adendathiels"],
                     ]
                 ),
             ]),
@@ -536,18 +750,6 @@
         const auctionControls = document.querySelector("#content article");
         auctionControls.appendChild(quickFiltersSectionHeader);
         auctionControls.appendChild(quickFiltersSection);
-
-        document.querySelectorAll("#lucius-filter").forEach(item => { item.style.background = "#ffaa00"});
-        document.querySelectorAll("#ichorus-filter").forEach(item => { item.style.background = "#ffaa00"});
-        document.querySelectorAll("#opiehnzas-filter").forEach(item => { item.style.background = "#ffaa00"});
-        document.querySelectorAll("#táliths-filter").forEach(item => { item.style.background = "#ffaa00"});
-
-
-        // document.querySelectorAll("#assassination-filter").forEach(item => { item.style.background = "#ffaa00"});
-        // document.querySelectorAll("#delicacy-filter").forEach(item => { item.style.background = "#ffaa00"});
-        // document.querySelectorAll("#conflict-filter").forEach(item => { item.style.background = "#ffaa00"});
-        // document.querySelectorAll("#heaven-filter").forEach(item => { item.style.background = "#ffaa00"});
-        // document.querySelectorAll("#solitude-filter").forEach(item => { item.style.background = "#ffaa00"});
 
     }
 
@@ -571,14 +773,79 @@
 
                 const collapseLoL = [
                     createSortButton("Damage"),
+                    createSortButton("Armor"),
                     createSortButton("Agility"),
                     createSortButton("Dexterity"),
+                    createSortButton("Charisma"),
                     createSortButton("Healing"),
                     createSortButton("Block"),
                 ].forEach(button => { sortSectionContainer.appendChild(button) });
             }
         }, 100);
     }
+
+    function modifyFilterSection() {
+
+        // Move hide gold button
+        const filterSection = document.querySelector("section > a.gca-auction-show-hide-button").parentNode;
+        const tableRows = filterSection.querySelectorAll("form > table > tbody > tr");
+        const lastRow = tableRows[tableRows.length - 1]
+        const filterHideGoldButton = filterSection.querySelector("a");
+        const td = document.createElement("td")
+        td.appendChild(filterHideGoldButton)
+        lastRow.appendChild(td);
+
+        // Create filters
+        const filtersSectionCategoriesContainer = document.createElement("div");
+        filtersSectionCategoriesContainer.setAttribute("id", nameToID("Filter section categories container"));
+        filtersSectionCategoriesContainer.style.display = "flex";
+        filtersSectionCategoriesContainer.style.flexDirection = "row";
+        filtersSectionCategoriesContainer.style.justifyContent = "space-evenly";
+        filtersSectionCategoriesContainer.style.columnGap = "0.125rem";
+        filtersSectionCategoriesContainer.style.margin = "0.125rem";
+
+        [
+            createFilterCategory("Control",
+            [
+                // createGenericButton()
+            ]),
+        ].forEach(category => filtersSectionCategoriesContainer.append(category))
+
+        filterSection.appendChild(filtersSectionCategoriesContainer)
+    }
+
+    function isFriendlyBid(auctionBidDiv){
+        const bidder = Array.from(auctionBidDiv.querySelectorAll("a")).filter(a => a.querySelector("span"))
+        return bidder.length ? true : false
+    }
+
+    function isFoodItem(auctionItemDiv) {
+        return auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2] === "7"
+
+    }
+
+    function getBidButtonOf(auctionBidDiv){
+        return auctionBidDiv.querySelector("input[type='button'][value='Bid'][name='bid']")
+    }
+
+    function bidFood() {
+        if(confirm("Are you sure you want to bid on all the food available? It's gonna take some time"))
+        {
+            const itemForm = document.querySelectorAll("#auction_table td form")
+            foodItemsToBid = Array.from(itemForm).filter(form => !isFriendlyBid(form.querySelector(".auction_bid_div")) && isFoodItem(form.querySelector(".auction_item_div")))
+            let index = 0
+            let timer = setInterval(() => {
+                getBidButtonOf(foodItemsToBid[index]).click()
+                if (index === foodItemsToBid.length - 1) clearInterval(timer)
+                else index++
+            }, 250)
+        }
+    }
+
+    function sortMercByMainTrait(){
+
+    }
+
 
     // const HOST = `https://${window.location.host}/game/index.php?`;
 
@@ -595,6 +862,7 @@
 
         // addTotalCost();
         // document.querySelectorAll(".auction_bid_div input[type='text']").forEach(input => {print(input.style.backgroundColor)})
+        modifyFilterSection();
         overwriteGCASortSection();
         addQuickFilters();
         mercDisplayAttr();
@@ -609,7 +877,7 @@
 
                 const noBidsTest = bidItem.firstElementChild;
                 if (noBidsTest) {
-                    noBids = noBidsTest.innerText.contains("No bids");1
+                    noBids = noBidsTest.innerText.contains("No bids");
                     myBidNoRefresh = noBidsTest.innerText.contains("Your bid has been placed");
                 }
 
@@ -630,5 +898,5 @@
                 friendlyBidder || myBidNoRefresh ? bidBox.style.backgroundColor = "lightgreen" : null;
             });
         }, 500);
-    }, 500);
+    }, 100);
 })();

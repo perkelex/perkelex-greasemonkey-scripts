@@ -20,7 +20,6 @@
     }
 
     function showHideElement(element) {
-        // const element = document.querySelector(`#${elementID}`);
         element.style.display.contains("block") ? element.style.display = "none" : element.style.display = "block";
     }
 
@@ -41,39 +40,6 @@
         section.style.minHeight = "45px";
         section.style.display = "block";
         return section;
-    }
-
-    function createGenericButton(content, type){
-        const button = document.createElement("button");
-        button.setAttribute("id", `${content.toLowerCase().replaceAll(" ", "-")}-${type.toLowerCase()}`);
-        button.appendChild(document.createTextNode(`${content}`));
-        button.className += "awesome-button";
-        button.style.margin = "0rem 0.25rem";
-        return button;
-    }
-
-    function createFilterCategory(title, children){
-        const category = document.createElement("div");
-        category.setAttribute("id", `filter-${title.toLowerCase()}-category`);
-        category.style.display = "flex";
-        category.style.flexDirection = "column";
-        category.style.gap = "0.25rem";
-        category.style.border = "1px solid black";
-        category.style.borderRadius = "0.5rem";
-
-        const categoryHeader = document.createElement("div");
-        categoryHeader.appendChild(document.createTextNode(title));
-        categoryHeader.style.fontWeight = "bold";
-        categoryHeader.style.textDecoration = "underline";
-        categoryHeader.style.margin = "0rem 0.25rem";
-
-        category.appendChild(categoryHeader);
-
-        for (const child of children){
-            category.appendChild(child);
-        }
-
-        return category;
     }
 
     setTimeout(() => {
@@ -118,15 +84,31 @@
                 const name = leftPackageItemInfo.querySelector("span");
 
                 name.setAttribute("style", `color: ${name.style.color}; font-size: 1.25rem !important`);
-                const splitName = name.textContent.split(" ");
-                name.textContent = `${splitName[0]} ${splitName[splitName.length-1]}`;
+                const splitName = name.innerText.split(" ");
+                name.innerText = `${splitName[0]} ${splitName[splitName.length-1]}`;
 
                 const duration = rightPackageItemInfo.querySelector("span.ticker");
+                const level = rightPackageItemInfo.querySelector(":scope > span");
 
                 sender.innerText.contains("Auction") ? pack.style.background = "rgba(0, 255, 0, 0.5)" : null;
                 sender.innerText.contains("Smelter") ? pack.style.background = "rgba(255, 255, 0, 0.5)" : null;
 
-                // ["lucius", "antonius"].some(prefix => name.innerText.toLowerCase().contains(prefix)) ? leftPackageItemInfo.style.background = "rgba(0, 0, 255, 0.5)" : null;
+                const itemOfInterestColor = "rgba(255, 165, 0, 0.5)";
+                const itemsForSmeltColor = "rgba(128, 128, 128, 0.5)";
+
+                [
+                    /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
+                    /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
+                    /valerius/i, /mateus/i, /marcellus/i, /constantinus/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
+                    // /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
+                    // /umbros/i, /chucks/i, /Xenphlames/i, /Appius/i, // Storm Rune - Opiehnzas
+                    // /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i // Storm Rune - Opiehnzas
+                ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemsForSmeltColor : null;
+
+                [
+                    /lucius/i, /antonius/i, /gaius/i
+                ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemOfInterestColor : null;
+
                 parseInt(duration.dataset.tickerTimeLeft) < Constants.oneDayInMilliseconds ? duration.parentNode.style.background = "rgba(255, 0, 0, 0.5)" : null;
             });
 

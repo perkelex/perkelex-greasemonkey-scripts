@@ -39,7 +39,7 @@
             paintAuctionStatus(gladiator);
             paintAuctionStatus(mercenary);
 
-            document.querySelectorAll("#chatFulldiv").forEach(chat => { chat.remove(); });
+            document.querySelectorAll("#chatFulldiv").forEach(chat => { chat.style.display = "none" });
             // disableMouseOverMenu();
         }, 500);
     }, 500);
