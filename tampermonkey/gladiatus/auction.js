@@ -339,6 +339,11 @@
         static isFoodItem(auctionItemDiv) {
             return auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2] === "7"
         }
+
+        static isGear(auctionItemDiv) {
+            const itemID = parseInt(auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2])
+            return itemID >= 1 && itemID <= 9 && itemID !== 7
+        }
     }
 
 
@@ -380,6 +385,37 @@
             const form = td.querySelector("form");
             if (form && ! Array.from(arguments).every(arg => form.dataset.item_name.toLowerCase().contains(arg.toLowerCase()))) {
                 td.style.display = "none";
+            }
+        });
+
+        hideEmptyTableRows(auctionTable)
+    }
+
+    function customTextFilter() {
+        resetAuctionItemsDisplay();
+
+        const input = document.querySelector("#text-filter-input").value.split(" ")
+
+        if (Flags.quickFilterToggle && State.isFilteredBy(Array.from(input).join(" "))) {
+            State.resetFilter();
+            return
+        }
+
+        State.setFilter(Array.from(input).join(" "));
+
+        const auctionTable = document.querySelector("#auction_table");
+
+        auctionTable.querySelectorAll("td").forEach(td => {
+            const form = td.querySelector("form");
+            if (form) {
+                const itemName = form.dataset.item_name
+                const itemTooltip = form.querySelector("div > div > div").dataset.tooltip.split("Value")[0]
+                const haystack = itemName + itemTooltip
+                const itemDiv = form.querySelector(".auction_item_div")
+
+                if (!Array.from(input).every(keyword => haystack.match(new RegExp(keyword, "i")) && Items.isGear(itemDiv))){
+                    td.style.display = "none";
+                }
             }
         });
 
@@ -543,6 +579,10 @@
         }
     }
 
+    function motherOfAllFilters(...keywords){
+
+    }
+
 
     // ========================== Generators ==========================
     function createGenericButton(content, type){
@@ -635,6 +675,17 @@
         return section;
     }
 
+    function createRowContainer(title) {
+        const container = document.createElement("div");
+        container.setAttribute("id", nameToID(title));
+        container.style.display = "flex";
+        container.style.flexDirection = "row";
+        container.style.justifyContent = "space-evenly";
+        container.style.columnGap = "0.125rem";
+        container.style.margin = "0.125rem";
+        return container
+    }
+
     // ========================== Other functions ==========================
     function mercDisplayAttr() {
         const auctionItems = document.querySelectorAll(".auction_item_div");
@@ -687,13 +738,18 @@
         const quickFiltersSection = createSection("Quick Filters Section");
         const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, quickFiltersSection));
 
-        const quickFiltersSectionCategoriesContainer = document.createElement("div");
-        quickFiltersSectionCategoriesContainer.setAttribute("id", nameToID("Filter categories container"));
-        quickFiltersSectionCategoriesContainer.style.display = "flex";
-        quickFiltersSectionCategoriesContainer.style.flexDirection = "row";
-        quickFiltersSectionCategoriesContainer.style.justifyContent = "space-evenly";
-        quickFiltersSectionCategoriesContainer.style.columnGap = "0.125rem";
-        quickFiltersSectionCategoriesContainer.style.margin = "0.125rem";
+        const quickFiltersSectionCategoriesContainer = createRowContainer("Filter categories container")
+        const customTextFilterContainer = createRowContainer("Custom text filter")
+        customTextFilterContainer.style.justifyContent = "center";
+
+        const customTextFilterInput = document.createElement("input")
+        customTextFilterInput.setAttribute("type", "text")
+        customTextFilterInput.setAttribute("id", nameToID("text filter input"))
+
+        const fireCustomTextInputFilter = createGenericFilterButton("Find it!", customTextFilter)
+
+        customTextFilterContainer.appendChild(customTextFilterInput)
+        customTextFilterContainer.appendChild(fireCustomTextInputFilter)
 
         const neededThisToCollapseTheListLoL = [
             createFilterCategory("Control",
@@ -840,6 +896,7 @@
             ]),
         ].forEach(category => { quickFiltersSectionCategoriesContainer.appendChild(category) });
 
+        quickFiltersSection.appendChild(customTextFilterContainer);
         quickFiltersSection.appendChild(quickFiltersSectionCategoriesContainer);
 
         const auctionControls = document.querySelector("#content article");

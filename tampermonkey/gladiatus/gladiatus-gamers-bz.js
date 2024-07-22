@@ -27,6 +27,7 @@
         const dexInt = []
         const agiCha = []
         const agiInt = []
+        const chaInt = []
         const dexAgiCha = []
         const dexAgiInt = []
 
@@ -45,6 +46,8 @@
                 agiCha.push(table)
             } else if(statsCell && cellContains(statsCell, agility, intelligence)){
                 agiInt.push(table)
+            } else if(statsCell && cellContains(statsCell, charisma, intelligence)){
+                chaInt.push(table)
             } else if(statsCell && cellContains(statsCell, dexterity, agility, charisma)){
                 dexAgiCha.push(table)
             } else if(statsCell && cellContains(statsCell, dexterity, agility, intelligence)){
@@ -57,6 +60,7 @@
         console.log(dexInt)
         console.log(agiCha)
         console.log(agiInt)
+        console.log(chaInt)
         console.log(dexAgiCha)
         console.log(dexAgiInt)
 
