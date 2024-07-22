@@ -18,10 +18,11 @@
         /provinciarum/i,
 
         // grind
-        /caravan/i, // s69 expedition
+        /Mesoai\-Oasis/i, // s69 expedition
         /In the Heart of Decay/i, //s69 dungeon
 
-        /grimwood/i,
+        /death hill/i,
+        /viking camp/i,
         /opponents at expeditions/i,
 
         //misc

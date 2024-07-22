@@ -266,13 +266,7 @@
         return bidder.length ? true : false
     }
 
-    function isFoodItem(auctionItemDiv) {
-        return auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2] === "7"
-    }
 
-    function isMinLevel(auctionItemDiv, level){
-        return parseInt(auctionItemDiv.querySelector("div > div > div").dataset.level) >= level
-    }
 
     function getBidButtonOf(auctionBidDiv){
         return auctionBidDiv.querySelector("input[type='button'][value='Bid'][name='bid']")
@@ -293,6 +287,15 @@
                     return "Healer";
                 default:
                     return "Damage";
+            }
+        }
+    }
+
+    class Food {
+        static isSmall(id) {
+            switch(id){
+                case "10": return false
+                default : return true
             }
         }
     }
@@ -327,6 +330,14 @@
             switch(type){
                 case "Mercenary": return "15";
             }
+        }
+
+        static isMinLevel(auctionItemDiv, level) {
+            return parseInt(auctionItemDiv.querySelector("div > div > div").dataset.level) >= level
+        }
+
+        static isFoodItem(auctionItemDiv) {
+            return auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2] === "7"
         }
     }
 
@@ -516,9 +527,13 @@
         if(confirm("Are you sure you want to bid on all the food available? It's gonna take some time"))
         {
             const itemForm = document.querySelectorAll("#auction_table td form")
-            const auctionBidDiv = form.querySelector(".auction_bid_div")
-            const auctionItemDiv = form.querySelector(".auction_item_div")
-            foodItemsToBid = Array.from(itemForm).filter(form => !isFriendlyBid(auctionBidDiv) && isFoodItem(auctionItemDiv && isMinLevel(auctionItemDiv, minLevel)))
+            console.log(itemForm[0].querySelector(".auction_item_div > div > div"))
+            foodItemsToBid = Array.from(itemForm).filter(form =>
+                !isFriendlyBid(form.querySelector(".auction_bid_div")) &&
+                Items.isFoodItem(form.querySelector(".auction_item_div")) &&
+                Items.isMinLevel(form.querySelector(".auction_item_div"), minLevel) &&
+                Food.isSmall(form.querySelector(".auction_item_div > div > div").classList[0].split("-")[3])
+            )
             let index = 0
             let timer = setInterval(() => {
                 getBidButtonOf(foodItemsToBid[index]).click()
