@@ -235,9 +235,6 @@
         },
     }
 
-    const mercCategoyMapping = {
-        "15": "test"
-    }
 
     class State{
         static currentFilter = null;
@@ -259,9 +256,26 @@
         static quickFilterToggle = false;
     }
 
-    // Utils
+    // ========================== Utils ==========================
     function nameToID(name) {
         return name.toLowerCase().replaceAll(" ", "-");
+    }
+
+    function isFriendlyBid(auctionBidDiv){
+        const bidder = Array.from(auctionBidDiv.querySelectorAll("a")).filter(a => a.querySelector("span"))
+        return bidder.length ? true : false
+    }
+
+    function isFoodItem(auctionItemDiv) {
+        return auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2] === "7"
+    }
+
+    function isMinLevel(auctionItemDiv, level){
+        return parseInt(auctionItemDiv.querySelector("div > div > div").dataset.level) >= level
+    }
+
+    function getBidButtonOf(auctionBidDiv){
+        return auctionBidDiv.querySelector("input[type='button'][value='Bid'][name='bid']")
     }
 
     class Mercenary {
@@ -286,6 +300,7 @@
     class Items {
         static getTypeFromId(id) {
             switch(id){
+                case "-1": return "Any";
                 case "1": return "Weapon";
                 case "2": return "Shield";
                 case "3": return "Chestplate";
@@ -316,7 +331,7 @@
     }
 
 
-    // Functors
+    // ========================== Functors ==========================
     function resetAuctionItemsDisplay() {
         document.querySelectorAll("#auction_table td").forEach(td => {td.style.display = "table-cell"});
         document.querySelectorAll("#auction_table tr").forEach(tr => {tr.style.display = "table-row"});
@@ -334,20 +349,8 @@
 
         const auctionTable = document.querySelector("#auction_table");
 
-        // hide unwanted table cells
-        auctionTable.querySelectorAll("td").forEach(td => {
-            const form = td.querySelector("form");
-            if (form && !form.dataset.item_name.toLowerCase().contains(content.toLowerCase())) {
-                td.style.display = "none";
-            }
-        });
-
-        // hide empty table rows
-        auctionTable.querySelectorAll("tr").forEach(tr => {
-            if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
-                tr.style.display = "none";
-            }
-        });
+        hideUnwantedCells(auctionTable, [[content]])
+        hideEmptyTableRows(auctionTable)
     }
 
     function multiFilterContent() {
@@ -362,7 +365,6 @@
 
         const auctionTable = document.querySelector("#auction_table");
 
-        // hide unwanted table cells
         auctionTable.querySelectorAll("td").forEach(td => {
             const form = td.querySelector("form");
             if (form && ! Array.from(arguments).every(arg => form.dataset.item_name.toLowerCase().contains(arg.toLowerCase()))) {
@@ -370,12 +372,7 @@
             }
         });
 
-        // hide empty table rows
-        auctionTable.querySelectorAll("tr").forEach(tr => {
-            if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
-                tr.style.display = "none";
-            }
-        });
+        hideEmptyTableRows(auctionTable)
     }
 
     function customFilter(complexCriteriaList){
@@ -383,18 +380,93 @@
 
         const auctionTable = document.querySelector("#auction_table");
 
-        // hide unwanted table cells
+        hideUnwantedCells(auctionTable, complexCriteriaList);
+        hideEmptyTableRows(auctionTable);
+    }
+
+    function customMercFilter(type){
+        resetAuctionItemsDisplay();
+
+        const auctionTable = document.querySelector("#auction_table");
+
+        const tdsToShow = []
+        const tdsToHide = []
+        const trs = []
+
         auctionTable.querySelectorAll("td").forEach(td => {
             const form = td.querySelector("form");
-            if (form && !Array.from(complexCriteriaList).some(criteria => criteria.every(term => form.dataset.item_name.toLowerCase().contains(term.toLowerCase())))) {
-                td.style.display = "none";
+            if (form){
+                const itemDiv = form.querySelector(".auction_item_div")
+                const itemClassListSplit = itemDiv.querySelector("div > div > div").classList[0].split("-")
+                const itemTypeId = itemClassListSplit[2]
+                const itemSubTypeId = itemClassListSplit[3]
+                const isMercAndMatchesType = Items.getTypeFromId(itemTypeId) === "Mercenary" && type === Mercenary.getTypeFromId(itemSubTypeId)
+
+                if (!isMercAndMatchesType) {
+                    td.style.display = "none";
+                    tdsToHide.push(td.cloneNode(true))
+                } else {
+                    tdsToShow.push(td.cloneNode(true));
+                }
+                // tdsToShow.sort(function (a, b){
+                //     const itemA = a.querySelector(".auction_bid_div")
+                //     const itemB = b.querySelector(".auction_bid_div")
+                //     if (itemA && itemB) {
+                //         itemAValue = parseInt(itemA.children[2].textContent.split(" ")[0])
+                //         itemBValue = parseInt(itemB.children[2].textContent.split(" ")[0])
+
+                //         if (itemAValue > itemBValue){
+                //             return -1
+                //         } else if (itemAValue < itemBValue) {
+                //             return 1
+                //         }
+
+                //         return 0
+                //     }
+                //     return 0;
+                // })
             }
         });
 
-        // hide empty table rows
-        auctionTable.querySelectorAll("tr").forEach(tr => {
+        // tdsToShow.forEach(td => {
+        //     const tr = document.createElement("tr")
+        //     tr.style.display = "table-row"
+        //     tr.appendChild(td)
+        //     trs.push(tr)
+        // })
+
+        // tdsToHide.forEach(td => {
+        //     const tr = document.createElement("tr")
+        //     tr.style.display = "none"
+        //     tr.appendChild(td)
+        //     trs.push(tr)
+        // })
+
+        // const tbody = auctionTable.querySelector("tbody")
+        // while (tbody.firstChild){
+        //     tbody.firstChild.remove()
+        // }
+
+        // trs.forEach(tr => {
+        //     tbody.appendChild(tr)
+        // })
+
+        hideEmptyTableRows(auctionTable)
+    }
+
+    function hideEmptyTableRows(table) {
+        table.querySelectorAll("tr").forEach(tr => {
             if (Array.from(tr.querySelectorAll("td")).every(td => td.style.display.contains("none"))) {
                 tr.style.display = "none";
+            }
+        });
+    }
+
+    function hideUnwantedCells(table, complexCriteria) {
+        table.querySelectorAll("td").forEach(td => {
+            const form = td.querySelector("form");
+            if (form && !Array.from(complexCriteria).some(criteria => criteria.every(term => form.dataset.item_name.toLowerCase().contains(term.toLowerCase())))) {
+                td.style.display = "none";
             }
         });
     }
@@ -437,12 +509,27 @@
     }
 
     function showHideElement(element) {
-        // const element = document.querySelector(`#${elementID}`);
         element.style.display.contains("block") ? element.style.display = "none" : element.style.display = "block";
     }
 
+    function bidFood(minLevel) {
+        if(confirm("Are you sure you want to bid on all the food available? It's gonna take some time"))
+        {
+            const itemForm = document.querySelectorAll("#auction_table td form")
+            const auctionBidDiv = form.querySelector(".auction_bid_div")
+            const auctionItemDiv = form.querySelector(".auction_item_div")
+            foodItemsToBid = Array.from(itemForm).filter(form => !isFriendlyBid(auctionBidDiv) && isFoodItem(auctionItemDiv && isMinLevel(auctionItemDiv, minLevel)))
+            let index = 0
+            let timer = setInterval(() => {
+                getBidButtonOf(foodItemsToBid[index]).click()
+                if (index === foodItemsToBid.length - 1) clearInterval(timer)
+                else index++
+            }, 250)
+        }
+    }
 
-    // Generators
+
+    // ========================== Generators ==========================
     function createGenericButton(content, type){
         const button = document.createElement("button");
         button.setAttribute("id", `${content.toLowerCase().replaceAll(" ", "-")}-${type.toLowerCase()}`);
@@ -470,11 +557,17 @@
         return contentFilterButton;
     }
 
-    // complexCriteria looks like [[ ["lucius", "delicacy"], ["ichorus", "assasination"], ...]]
+    // complexCriteria looks like [ [["lucius", "delicacy"], ["ichorus", "assasination"], ...] ]
     // doubling list because bind acts strange
     function createCustomFilterButton(title, complexCriteria) {
         const customFilterButton = createGenericButton(title, "filter");
         customFilterButton.addEventListener("click", customFilter.bind(this, [complexCriteria]));
+        return customFilterButton;
+    }
+
+    function createCustomMercFilterButton(title, mercType) {
+        const customFilterButton = createGenericButton(title, "filter");
+        customFilterButton.addEventListener("click", customMercFilter.bind(this, mercType));
         return customFilterButton;
     }
 
@@ -527,7 +620,7 @@
         return section;
     }
 
-    // Other functions
+    // ========================== Other functions ==========================
     function mercDisplayAttr() {
         const auctionItems = document.querySelectorAll(".auction_item_div");
         auctionItems.forEach(auctionItem => {
@@ -575,7 +668,6 @@
         });
     }
 
-
     function addQuickFilters() {
         const quickFiltersSection = createSection("Quick Filters Section");
         const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, quickFiltersSection));
@@ -594,7 +686,8 @@
                 createGenericFilterButton("Reset", resetAuctionItemsDisplay),
                 createGenericFilterButton("My Bids", filterMyBids),
                 createSubCategory("Auto"),
-                createGenericFilterButton("Food", bidFood),
+                createGenericFilterButton("Food 0", bidFood.bind(this, 0)),
+                createGenericFilterButton("Food 67", bidFood.bind(this, 67)),
             ]),
 
             createFilterCategory("Prefix",
@@ -632,6 +725,7 @@
             [
                 createSubCategory("Level 90"),
                 createFilterButton("Delicacy"),
+                createFilterButton("Harmony"),
                 createFilterButton("Assassination"),
                 createFilterButton("Conflict"),
                 createFilterButton("Heaven"),
@@ -640,24 +734,10 @@
 
             createFilterCategory("Mercenary",
             [
-                createCustomFilterButton("Tank", [
-                    ["Hoplomachus"], // Italy
-                    ["Elite Spear Carrier"], // Africa
-                    ["Eagle Wing"], // Germania
-                    ["Grandmaster"], // Britannia
-                ]),
-                createCustomFilterButton("Healer", [
-                    ["Medicus"], // Italy
-                    ["Medicine man"], // Africa
-                    ["Herbalist"], // Germania
-                    ["Druid Master"], // Britannia
-                ]),
-                createCustomFilterButton("Damage", [
-                    ["Thracian"], ["Murmillo"], ["Samnit"], // Italy
-                    ["Archer"], ["Experienced archer"], ["Sword Wolf"], // Africa
-                    ["Bear Warrior"], ["Scorpion Warrior"], ["Axe Warrior"], // Germania
-                    ["The Ranger"], ["Axe Thrower"], ["Chariot Driver"], // Britannia
-                ]),
+                createCustomMercFilterButton("Tank", "Tank"),
+                createCustomMercFilterButton("Healer", "Healer"),
+                createCustomMercFilterButton("Damage", "Damage"),
+
                 createSubCategory("Specific"),
                 createFilterButton("Samnit"),
                 createFilterButton("Murmillo"),
@@ -777,6 +857,7 @@
                     createSortButton("Agility"),
                     createSortButton("Dexterity"),
                     createSortButton("Charisma"),
+                    createSortButton("Intelligence"),
                     createSortButton("Healing"),
                     createSortButton("Block"),
                 ].forEach(button => { sortSectionContainer.appendChild(button) });
@@ -814,44 +895,24 @@
         filterSection.appendChild(filtersSectionCategoriesContainer)
     }
 
-    function isFriendlyBid(auctionBidDiv){
-        const bidder = Array.from(auctionBidDiv.querySelectorAll("a")).filter(a => a.querySelector("span"))
-        return bidder.length ? true : false
+    function highlightHighestMercStat(){
+        const form = document.querySelectorAll("#auction_table form")
+        form.forEach(form => {
+            const auctionItemDiv = form.querySelector(".auction_item_div")
+            print(auctionItemDiv.querySelector("div > div > div"))
+            const auctionBidDiv = form.querySelector(".auction_bid_div")
+        })
     }
-
-    function isFoodItem(auctionItemDiv) {
-        return auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2] === "7"
-
-    }
-
-    function getBidButtonOf(auctionBidDiv){
-        return auctionBidDiv.querySelector("input[type='button'][value='Bid'][name='bid']")
-    }
-
-    function bidFood() {
-        if(confirm("Are you sure you want to bid on all the food available? It's gonna take some time"))
-        {
-            const itemForm = document.querySelectorAll("#auction_table td form")
-            foodItemsToBid = Array.from(itemForm).filter(form => !isFriendlyBid(form.querySelector(".auction_bid_div")) && isFoodItem(form.querySelector(".auction_item_div")))
-            let index = 0
-            let timer = setInterval(() => {
-                getBidButtonOf(foodItemsToBid[index]).click()
-                if (index === foodItemsToBid.length - 1) clearInterval(timer)
-                else index++
-            }, 250)
-        }
-    }
-
-    function sortMercByMainTrait(){
-
-    }
-
 
     // const HOST = `https://${window.location.host}/game/index.php?`;
 
     // const TOKEN = getQueryParameterValue("sh");
 
     setTimeout(() => {
+
+        // const auctionTableOriginal = document.querySelector("#auction_table")
+        // const auctionTableClone = auctionTableOriginal.cloneNode(auctionTableOriginal)
+
         // clean useless text
         document.querySelectorAll("p").forEach(paragraph => {
             paragraph.textContent.contains("If someone overbids you you do") ? paragraph.style.display = "none" : null;
@@ -860,12 +921,11 @@
         document.querySelector("#content > article").style.margin = "1rem 0rem";
         document.querySelector("h2.buildingDesc.section-header").style.margin = "1rem 0rem";
 
-        // addTotalCost();
-        // document.querySelectorAll(".auction_bid_div input[type='text']").forEach(input => {print(input.style.backgroundColor)})
         modifyFilterSection();
         overwriteGCASortSection();
         addQuickFilters();
         mercDisplayAttr();
+        // highlightHighestMercStat();
 
         // paint auction item boxes
         setInterval(() => {

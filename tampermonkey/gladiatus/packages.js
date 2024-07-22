@@ -96,18 +96,32 @@
                 const itemOfInterestColor = "rgba(255, 165, 0, 0.5)";
                 const itemsForSmeltColor = "rgba(128, 128, 128, 0.5)";
 
-                [
-                    /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
-                    /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
-                    /valerius/i, /mateus/i, /marcellus/i, /constantinus/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
-                    // /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
-                    // /umbros/i, /chucks/i, /Xenphlames/i, /Appius/i, // Storm Rune - Opiehnzas
-                    // /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i // Storm Rune - Opiehnzas
-                ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemsForSmeltColor : null;
+                if(location.hostname.contains("s69-en")){
+                    [
+                        /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
+                        /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
+                        /valerius/i, /mateus/i, /marcellus/i, /constantinus/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
+                        // /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
+                        // /umbros/i, /chucks/i, /Xenphlames/i, /Appius/i, // Storm Rune - Opiehnzas
+                        // /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i // Storm Rune - Opiehnzas
+                    ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemsForSmeltColor : null;
 
-                [
-                    /lucius/i, /antonius/i, /gaius/i
-                ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemOfInterestColor : null;
+                    [
+                        /lucius/i, /antonius/i, /gaius/i
+                    ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemOfInterestColor : null;
+                }
+                else if (location.hostname.contains("s9-ee")){
+                    [
+                        /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i, // Flintstone - Táliths
+                        /gidras/i,
+                        /harmony/i, /assassination/i, /conflict/i, /heaven/i, /solitude/i
+                    ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemsForSmeltColor : null;
+
+                    [
+                        /Táliths/i, /Kerrannas/i, /gaius/i
+                    ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemOfInterestColor : null;
+                }
+
 
                 parseInt(duration.dataset.tickerTimeLeft) < Constants.oneDayInMilliseconds ? duration.parentNode.style.background = "rgba(255, 0, 0, 0.5)" : null;
             });
