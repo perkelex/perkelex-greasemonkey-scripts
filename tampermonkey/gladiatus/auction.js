@@ -394,26 +394,49 @@
     function customTextFilter() {
         resetAuctionItemsDisplay();
 
-        const input = document.querySelector("#text-filter-input").value.split(" ")
+        let nameInput = document.querySelector(`#${nameToID("text filter name input")}`).value
+        nameInput = nameInput ? nameInput.split(" ") : nameInput
+
+        let attributeInput = document.querySelector(`#${nameToID("text filter attribute input")}`).value
+        attributeInput = attributeInput ? attributeInput.split(" ") : attributeInput
+
+        if (!nameInput && !attributeInput){
+            return
+        }
 
         if (Flags.quickFilterToggle && State.isFilteredBy(Array.from(input).join(" "))) {
             State.resetFilter();
             return
         }
 
-        State.setFilter(Array.from(input).join(" "));
+        // State.setFilter(Array.from(input).join(" "));
 
         const auctionTable = document.querySelector("#auction_table");
 
         auctionTable.querySelectorAll("td").forEach(td => {
             const form = td.querySelector("form");
             if (form) {
+                let nameMatch = true
+                let attributesMatch = true
                 const itemName = form.dataset.item_name
                 const itemTooltip = form.querySelector("div > div > div").dataset.tooltip.split("Value")[0]
-                const haystack = itemName + itemTooltip
                 const itemDiv = form.querySelector(".auction_item_div")
 
-                if (!Array.from(input).every(keyword => haystack.match(new RegExp(keyword, "i")) && Items.isGear(itemDiv))){
+                if (nameInput && !Array.from(nameInput).every(keyword => itemName.match(new RegExp(keyword, "i")) && Items.isGear(itemDiv))){
+                    nameMatch = false
+                    // print(`${nameInput} - ${itemName}`)
+                    // print(itemName.match(new RegExp(nameInput[0], "i")))
+                    // td.style.display = "none";
+                }
+
+                if (attributeInput && !Array.from(attributeInput).every(keyword => itemTooltip.match(new RegExp(`${keyword}[a-zA-Z]*\s\+`, "i")) && Items.isGear(itemDiv))){
+                    attributesMatch = false
+                    // print(itemTooltip)
+                    // print(itemTooltip.match(new RegExp(`${attributeInput[0]}[a-zA-Z]*\s\+`, "i")))
+                    // td.style.display = "none";
+                }
+
+                if ((nameInput && !nameMatch) || (attributeInput && !attributesMatch)) {
                     td.style.display = "none";
                 }
             }
@@ -741,15 +764,27 @@
         const quickFiltersSectionCategoriesContainer = createRowContainer("Filter categories container")
         const customTextFilterContainer = createRowContainer("Custom text filter")
         customTextFilterContainer.style.justifyContent = "center";
+        customTextFilterContainer.style.margin = "1rem";
 
-        const customTextFilterInput = document.createElement("input")
-        customTextFilterInput.setAttribute("type", "text")
-        customTextFilterInput.setAttribute("id", nameToID("text filter input"))
+        const customTextFilterInputsContainer = createRowContainer("Custom text filter inputs")
+        customTextFilterInputsContainer.style.justifyContent = "center";
+        customTextFilterInputsContainer.style.flexDirection = "column";
+        customTextFilterInputsContainer.style.margin = "0.5rem";
 
-        const fireCustomTextInputFilter = createGenericFilterButton("Find it!", customTextFilter)
+        const customTextFilterNameInput = document.createElement("input")
+        customTextFilterNameInput.setAttribute("type", "text")
+        customTextFilterNameInput.setAttribute("id", nameToID("text filter name input"))
 
-        customTextFilterContainer.appendChild(customTextFilterInput)
-        customTextFilterContainer.appendChild(fireCustomTextInputFilter)
+        const customTextFilterAttributeInput = document.createElement("input")
+        customTextFilterAttributeInput.setAttribute("type", "text")
+        customTextFilterAttributeInput.setAttribute("id", nameToID("text filter attribute input"))
+
+        const triggerCustomTextInputFilter = createGenericFilterButton("Find it!", customTextFilter)
+
+        customTextFilterInputsContainer.appendChild(customTextFilterNameInput)
+        customTextFilterInputsContainer.appendChild(customTextFilterAttributeInput)
+        customTextFilterContainer.appendChild(customTextFilterInputsContainer)
+        customTextFilterContainer.appendChild(triggerCustomTextInputFilter)
 
         const neededThisToCollapseTheListLoL = [
             createFilterCategory("Control",
@@ -794,9 +829,9 @@
 
             createFilterCategory("Suffix",
             [
-                createSubCategory("Level 90"),
                 createFilterButton("Delicacy"),
                 createFilterButton("Harmony"),
+                createFilterButton("Triviality"),
                 createFilterButton("Assassination"),
                 createFilterButton("Conflict"),
                 createFilterButton("Heaven"),
@@ -816,7 +851,15 @@
                 createFilterButton("Grandmaster"),
 
                 createSubCategory("Misc"),
-                createFilterButton("Grindstone")
+                createFilterButton("Grindstone"),
+                createCustomFilterButton("Strength", [["blue powder"]]),
+                createCustomFilterButton("Dexterity", [["yellow powder"]]),
+                createCustomFilterButton("Agility", [["green powder"]]),
+                createCustomFilterButton("Constitution", [["orange powder"]]),
+                createCustomFilterButton("Charisma", [["violet powder"]]),
+                createCustomFilterButton("Intelligence", [["red powder"]]),
+                createCustomFilterButton("Armor", [["protective gear"]]),
+                createCustomFilterButton("Removal", [["detergent spong"]]),
             ]),
 
             createFilterCategory("Presets",
@@ -871,7 +914,7 @@
                 ),
                 createCustomFilterButton("Sulphur (Ichorus)",
                     [
-                        ["icorus"],
+                        ["ichorus"],
                         ["decimus"],
                         ["jennifers"],
                         ["trafans"],

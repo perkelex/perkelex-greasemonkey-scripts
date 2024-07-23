@@ -101,9 +101,6 @@
                         /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
                         /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
                         /valerius/i, /mateus/i, /marcellus/i, /constantinus/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
-                        // /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
-                        // /umbros/i, /chucks/i, /Xenphlames/i, /Appius/i, // Storm Rune - Opiehnzas
-                        // /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i // Storm Rune - Opiehnzas
                     ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemsForSmeltColor : null;
 
                     [
@@ -113,8 +110,12 @@
                 else if (location.hostname.contains("s9-ee")){
                     [
                         /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i, // Flintstone - Táliths
-                        /gidras/i,
-                        /harmony/i, /assassination/i, /conflict/i, /heaven/i, /solitude/i
+                        /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
+                        /harmony/i, /assassination/i, /conflict/i, /heaven/i, /solitude/i, /triviality/i // suffixes of interest
+                        // high lvl
+                        /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
+                        /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
+                        /valerius/i, /mateus/i, /marcellus/i, /constantinus/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
                     ].some(prefix => name.innerText.match(prefix)) ? pack.style.background = itemsForSmeltColor : null;
 
                     [
