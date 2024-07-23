@@ -111,7 +111,7 @@
                     [
                         /orleds/i, /Ashitills/i, /Táliths/i, /Adendathiels/i, // Flintstone - Táliths
                         /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
-                        /harmony/i, /assassination/i, /conflict/i, /heaven/i, /solitude/i, /triviality/i // suffixes of interest
+                        /harmony/i, /assassination/i, /conflict/i, /heaven/i, /solitude/i, /triviality/i, // suffixes of interest
                         // high lvl
                         /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
                         /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
