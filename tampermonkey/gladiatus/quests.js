@@ -21,8 +21,8 @@
         /Mesoai\-Oasis/i, // s69 expedition
         /In the Heart of Decay/i, //s69 dungeon
 
-        /bandit camp/i,
-        /In Enemy Hands/i,
+        /caravan/i,
+        /Fairground/i,
         /opponents at expeditions/i,
 
         //misc

@@ -102,7 +102,7 @@
             "Lurtscharas": 15,
         },
         "Flintstone": {
-            "Orleds": 21,
+            "Orlelds": 21,
             "Adendathiels": 16,
             "Ashitills": 13,
             "Ashitills": 17,
@@ -433,10 +433,10 @@
             return
         }
 
-        if (Flags.quickFilterToggle && State.isFilteredBy(Array.from(input).join(" "))) {
-            State.resetFilter();
-            return
-        }
+        // if (Flags.quickFilterToggle && State.isFilteredBy(Array.from(input).join(" "))) {
+        //     State.resetFilter();
+        //     return
+        // }
 
         // State.setFilter(Array.from(input).join(" "));
 
@@ -458,7 +458,7 @@
                     // td.style.display = "none";
                 }
 
-                if (attributeInput && !Array.from(attributeInput).every(keyword => itemTooltip.match(new RegExp(`${keyword}[a-zA-Z]*\s\+`, "i")) && Items.isGear(itemDiv))){
+                if (attributeInput && !Array.from(attributeInput).every(keyword => itemTooltip.match(new RegExp(`${keyword}[a-zA-Z]* \\+\\d{2}`, "i")) && Items.isGear(itemDiv))){
                     attributesMatch = false
                     // print(itemTooltip)
                     // print(itemTooltip.match(new RegExp(`${attributeInput[0]}[a-zA-Z]*\s\+`, "i")))
@@ -579,7 +579,8 @@
                 !isFriendlyBid(form.querySelector(".auction_bid_div")) &&
                 Items.isFoodItem(form.querySelector(".auction_item_div")) &&
                 Items.isMinLevel(form.querySelector(".auction_item_div"), minLevel) &&
-                Food.isSmall(form.querySelector(".auction_item_div > div > div").classList[0].split("-")[3])
+                Food.isSmall(form.querySelector(".auction_item_div > div > div").classList[0].split("-")[3]) &&
+                parseInt(form.querySelector(".auction_bid_div input[type='text'][name='bid_amount']").value) <= 1000
             )
             let index = 0
             let timer = setInterval(() => {
@@ -609,6 +610,24 @@
                 !Array.from(nameCriteria).some(criterion => itemName.match(new RegExp(criterion, "i"))) ||
                 !itemQuality.match(new RegExp(Items.getMinimumQualityRegExStr(quality), "i")) ||
                 !(itemPrice <= maxPrice) ||
+                Items.isFoodItem(td.querySelector("form .auction_item_div"))
+            ){
+                td.style.display = "none"
+            }
+        })
+
+        hideEmptyTableRows(document.querySelector("#auction_table"))
+    }
+
+    function purpleItems(){
+        resetAuctionItemsDisplay()
+
+        document.querySelectorAll("#auction_table td").forEach(td => {
+            if (!td.querySelector("form")) return
+            const auctionBidDiv = td.querySelector("form .auction_bid_div")
+            const itemQuality = Items.getQualityFromColor(auctionBidDiv)
+            if(
+                !itemQuality.match(new RegExp(Items.getMinimumQualityRegExStr("Purple"), "i")) ||
                 Items.isFoodItem(td.querySelector("form .auction_item_div"))
             ){
                 td.style.display = "none"
@@ -799,11 +818,16 @@
         customTextFilterAttributeInput.setAttribute("id", nameToID("text filter attribute input"))
 
         const triggerCustomTextInputFilter = createGenericFilterButton("Find it!", customTextFilter)
+        const clearCustomTextInputFilter = createGenericFilterButton("Clear", () => {
+            document.querySelector("#text-filter-name-input").value = ""
+            document.querySelector("#text-filter-attribute-input").value = ""
+        })
 
         customTextFilterInputsContainer.appendChild(customTextFilterNameInput)
         customTextFilterInputsContainer.appendChild(customTextFilterAttributeInput)
         customTextFilterContainer.appendChild(customTextFilterInputsContainer)
         customTextFilterContainer.appendChild(triggerCustomTextInputFilter)
+        customTextFilterContainer.appendChild(clearCustomTextInputFilter)
 
         const neededThisToCollapseTheListLoL = [
             createFilterCategory("Control",
@@ -827,18 +851,16 @@
                 createFilterButton("Zeindras"),
                 createFilterButton("Kerrannas"),
                 createFilterButton("Táliths"),
-                createFilterButton("Trafans"),
                 createFilterButton("Opiehnzas"),
 
                 createSubCategory("High (80-100)"),
                 createFilterButton("Ichorus"),
                 createFilterButton("Lucius"),
-                createFilterButton("Titus"),
-                createFilterButton("Sextus"),
-                createFilterButton("Gaius"),
-                createFilterButton("Mandalus"),
                 createFilterButton("Antonius"),
-                createFilterButton("Constantinus"),
+
+                createSubCategory("Healing"),
+                createFilterButton("Mandalus"),
+                createFilterButton("Aurelius"),
 
                 createSubCategory("End (100+)"),
                 createFilterButton("Sebastianus"),
@@ -880,6 +902,8 @@
                 createCustomFilterButton("Intelligence", [["red powder"]]),
                 createCustomFilterButton("Armor", [["protective gear"]]),
                 createCustomFilterButton("Removal", [["detergent spong"]]),
+                createSubCategory("--------"),
+                createGenericFilterButton("Purple", purpleItems)
             ]),
 
             createFilterCategory("Presets",
@@ -926,7 +950,7 @@
                         ["valerius"],
                         ["mateus"],
                         ["marcellus"],
-                        ["constantinus"],
+                        ["constantius"],
                         ["servius"],
                         ["dexterus"],
                         ["giganticus"],
@@ -957,13 +981,20 @@
                 ),
                 createCustomSmeltFilterButton("Flintstone (Taliths)", "Blue", 15000,
                     [
-                        ["orleds"],
+                        ["orlelds"],
                         ["Ashitills"],
                         ["Táliths"],
                         ["Adendathiels"],
                     ]
                 ),
+                createCustomSmeltFilterButton("Delicacy", "Blue", 15000,
+                    [
+                        ["silence"],
+                        ["fragmentation"],
+                    ]
+                ),
                 createSubCategory("Scrolls"),
+                createCustomSmeltFilterButton("Kerrannas", "Green", 7500, ["Kerrannas"]),
                 createCustomSmeltFilterButton("Táliths", "Green", 7500, ["Táliths"]),
                 createCustomSmeltFilterButton("Opiehnzas", "Green", 10000, ["Opiehnzas"]),
                 createCustomSmeltFilterButton("Ichorus", "Green", 12500, ["Ichorus"]),

@@ -17,10 +17,10 @@
     }
 
     setTimeout(() => {
-        const agility = /Agility\s*\+/i
-        const dexterity = /Dexterity\s*\+/i
-        const charisma = /Charisma\s*\+/i
-        const intelligence = /Intelligence\s*\+/i
+        const agility = /Agility \+2\d/i
+        const dexterity = /Dexterity \+2\d/i
+        const charisma = /Charisma \+2\d/i
+        const intelligence = /Intelligence \+2\d/i
 
         const dexAgi = []
         const dexCha = []
@@ -55,16 +55,53 @@
             }
         })
 
-        console.log(dexAgi)
-        console.log(dexCha)
-        console.log(dexInt)
-        console.log(agiCha)
-        console.log(agiInt)
-        console.log(chaInt)
-        console.log(dexAgiCha)
-        console.log(dexAgiInt)
+        console.log("====================== Dexterity Agility ======================")
+        dexAgi.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Dexterity Charisma ======================")
+        dexCha.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Dexterity Intelligence ======================")
+        dexInt.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Agility Charisma ======================")
+        agiCha.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Agility Intelligence ======================")
+        agiInt.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Charisma Intelligence ======================")
+        chaInt.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Dexterity Agility Charisma ======================")
+        dexAgiCha.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
+
+        console.log("====================== Dexterity Agility Intelligence ======================")
+        dexAgiInt.forEach(table => {
+            console.log(table)
+            console.log(table.querySelector("tbody").children[0].children[1].querySelector("span").textContent)
+        })
 
     }, 500)
-    // table with backgroundColor === "#000000"
-
 })();
