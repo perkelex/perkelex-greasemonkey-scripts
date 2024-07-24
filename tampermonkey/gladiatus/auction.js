@@ -344,6 +344,35 @@
             const itemID = parseInt(auctionItemDiv.querySelector("div > div > div").classList[0].split("-")[2])
             return itemID >= 1 && itemID <= 9 && itemID !== 7
         }
+
+        static getQualityFromColor(auctionBidDiv){
+            switch(auctionBidDiv.children[2].style.color){
+                case "green": return "Green"
+                case "rgb(81, 89, 247)": return "Blue"
+                case "rgb(227, 3, 224)": return "Purple"
+                case "rgb(255, 106, 0)": return "Orange"
+                case "rgb(255, 0, 0)": return "Red"
+                default: return "unknown"
+            }
+        }
+
+        static getColorFromQuality(quality){
+            switch(quality){
+                case "Green": return "green"
+                case "Blue": return "rgb(81, 89, 247)"
+                case "Purple": return "rgb(227, 3, 224)"
+                case "Orange": return "rgb(255, 106, 0)"
+                case "Red": return "rgb(255, 0, 0)"
+            }
+        }
+
+        static getMinimumQualityRegExStr(quality){
+            const qualities = ["Green", "Blue", "Purple", "Orange", "Red"]
+            for(const idx in qualities){
+                if(qualities[idx] === quality)
+                    return qualities.slice(idx).join("|")
+            }
+        }
     }
 
 
@@ -478,48 +507,8 @@
                 } else {
                     tdsToShow.push(td.cloneNode(true));
                 }
-                // tdsToShow.sort(function (a, b){
-                //     const itemA = a.querySelector(".auction_bid_div")
-                //     const itemB = b.querySelector(".auction_bid_div")
-                //     if (itemA && itemB) {
-                //         itemAValue = parseInt(itemA.children[2].textContent.split(" ")[0])
-                //         itemBValue = parseInt(itemB.children[2].textContent.split(" ")[0])
-
-                //         if (itemAValue > itemBValue){
-                //             return -1
-                //         } else if (itemAValue < itemBValue) {
-                //             return 1
-                //         }
-
-                //         return 0
-                //     }
-                //     return 0;
-                // })
             }
         });
-
-        // tdsToShow.forEach(td => {
-        //     const tr = document.createElement("tr")
-        //     tr.style.display = "table-row"
-        //     tr.appendChild(td)
-        //     trs.push(tr)
-        // })
-
-        // tdsToHide.forEach(td => {
-        //     const tr = document.createElement("tr")
-        //     tr.style.display = "none"
-        //     tr.appendChild(td)
-        //     trs.push(tr)
-        // })
-
-        // const tbody = auctionTable.querySelector("tbody")
-        // while (tbody.firstChild){
-        //     tbody.firstChild.remove()
-        // }
-
-        // trs.forEach(tr => {
-        //     tbody.appendChild(tr)
-        // })
 
         hideEmptyTableRows(auctionTable)
     }
@@ -535,7 +524,7 @@
     function hideUnwantedCells(table, complexCriteria) {
         table.querySelectorAll("td").forEach(td => {
             const form = td.querySelector("form");
-            if (form && !Array.from(complexCriteria).some(criteria => criteria.every(term => form.dataset.item_name.toLowerCase().contains(term.toLowerCase())))) {
+            if (form && !Array.from(complexCriteria).some(criteria => criteria.every(term => form.dataset.item_name.match(new RegExp(term, "i"))))) {
                 td.style.display = "none";
             }
         });
@@ -586,7 +575,6 @@
         if(confirm("Are you sure you want to bid on all the food available? It's gonna take some time"))
         {
             const itemForm = document.querySelectorAll("#auction_table td form")
-            console.log(itemForm[0].querySelector(".auction_item_div > div > div"))
             foodItemsToBid = Array.from(itemForm).filter(form =>
                 !isFriendlyBid(form.querySelector(".auction_bid_div")) &&
                 Items.isFoodItem(form.querySelector(".auction_item_div")) &&
@@ -602,8 +590,32 @@
         }
     }
 
-    function motherOfAllFilters(...keywords){
+    function smeltFilter(){
+        resetAuctionItemsDisplay()
+        const args = Array.from(arguments)
+        const maxPrice = args.pop()
+        const quality = args.pop()
+        const nameCriteria = args
 
+        const itemTds = document.querySelectorAll("#auction_table td")
+        itemTds.forEach(td => {
+            if (!td.querySelector("form")) return
+            const auctionBidDiv = td.querySelector("form .auction_bid_div")
+            const itemName = auctionBidDiv.children[2].textContent
+            const itemQuality = Items.getQualityFromColor(auctionBidDiv)
+            const itemPrice = parseInt(auctionBidDiv.querySelector("input[type='text'][name='bid_amount']").value)
+
+            if(
+                !Array.from(nameCriteria).some(criterion => itemName.match(new RegExp(criterion, "i"))) ||
+                !itemQuality.match(new RegExp(Items.getMinimumQualityRegExStr(quality), "i")) ||
+                !(itemPrice <= maxPrice) ||
+                Items.isFoodItem(td.querySelector("form .auction_item_div"))
+            ){
+                td.style.display = "none"
+            }
+        })
+
+        hideEmptyTableRows(document.querySelector("#auction_table"))
     }
 
 
@@ -640,6 +652,13 @@
     function createCustomFilterButton(title, complexCriteria) {
         const customFilterButton = createGenericButton(title, "filter");
         customFilterButton.addEventListener("click", customFilter.bind(this, [complexCriteria]));
+        return customFilterButton;
+    }
+
+    function createCustomSmeltFilterButton(title, quality, maxPrice, nameCriteria){
+        const customFilterButton = createGenericButton(title, "filter");
+        customFilterButton.addEventListener("click", smeltFilter.bind(this, [...nameCriteria, quality, maxPrice]));
+        customFilterButton.style.color = Items.getColorFromQuality(quality)
         return customFilterButton;
     }
 
@@ -836,6 +855,7 @@
                 createFilterButton("Conflict"),
                 createFilterButton("Heaven"),
                 createFilterButton("Solitude"),
+                createFilterButton("Alleluia"),
             ]),
 
             createFilterCategory("Mercenary",
@@ -864,12 +884,12 @@
 
             createFilterCategory("Presets",
             [
-                createFilterButton("Lucius Assassination"),
-                createFilterButton("Lucius Delicacy"),
-                createFilterButton("Ichorus Assassination"),
-                createFilterButton("Gaius Conflict"),
-                createFilterButton("Opiehnzas Heaven"),
-                createFilterButton("Táliths Solitude"),
+                // createFilterButton("Lucius Assassination"),
+                // createFilterButton("Lucius Delicacy"),
+                // createFilterButton("Ichorus Assassination"),
+                // createFilterButton("Gaius Conflict"),
+                // createFilterButton("Opiehnzas Heaven"),
+                // createFilterButton("Táliths Solitude"),
                 createSubCategory("Complex filters"),
                 createCustomFilterButton("Level 90 gear",
                     [
@@ -881,8 +901,8 @@
                         ["Táliths", "solitude"],
                     ]
                 ),
-                createSubCategory("Smelt"),
-                createCustomFilterButton("Tincture of Stamina (Lucius)",
+                createSubCategory("Materials"),
+                createCustomSmeltFilterButton("Tincture of Stamina (Lucius)", "Blue", 15000,
                     [
                         ["lucius"],
                         ["fernabasts"],
@@ -890,7 +910,7 @@
                         ["sentarions"],
                     ]
                 ),
-                createCustomFilterButton("Crystal (Antonius)",
+                createCustomSmeltFilterButton("Crystal (Antonius)", "Blue", 15000,
                     [
                         ["manius"],
                         ["gaius"],
@@ -901,7 +921,7 @@
                         ["pontius"],
                     ]
                 ),
-                createCustomFilterButton("Amethyst (Antonius)",
+                createCustomSmeltFilterButton("Amethyst (Antonius)", "Blue", 15000,
                     [
                         ["valerius"],
                         ["mateus"],
@@ -912,7 +932,7 @@
                         ["giganticus"],
                     ]
                 ),
-                createCustomFilterButton("Sulphur (Ichorus)",
+                createCustomSmeltFilterButton("Sulphur (Ichorus)", "Blue", 15000,
                     [
                         ["ichorus"],
                         ["decimus"],
@@ -920,7 +940,7 @@
                         ["trafans"],
                     ]
                 ),
-                createCustomFilterButton("Storm Rune (Opiehnzas)",
+                createCustomSmeltFilterButton("Storm Rune (Opiehnzas)", "Blue", 15000,
                     [
                         ["umbros"],
                         ["chucks"],
@@ -928,7 +948,14 @@
                         ["Appius"],
                     ]
                 ),
-                createCustomFilterButton("Flintstone (Taliths)",
+                createCustomSmeltFilterButton("Protection Rune (Heaven)", "Blue", 15000,
+                    [
+                        ["accuracy"],
+                        ["heaven"],
+                        ["sickness"],
+                    ]
+                ),
+                createCustomSmeltFilterButton("Flintstone (Taliths)", "Blue", 15000,
                     [
                         ["orleds"],
                         ["Ashitills"],
@@ -936,6 +963,17 @@
                         ["Adendathiels"],
                     ]
                 ),
+                createSubCategory("Scrolls"),
+                createCustomSmeltFilterButton("Táliths", "Green", 7500, ["Táliths"]),
+                createCustomSmeltFilterButton("Opiehnzas", "Green", 10000, ["Opiehnzas"]),
+                createCustomSmeltFilterButton("Ichorus", "Green", 12500, ["Ichorus"]),
+                createCustomSmeltFilterButton("Lucius", "Green", 15000, ["Lucius"]),
+                createCustomSmeltFilterButton("Antonius", "Green", 20000, ["Antonius"]),
+                createCustomSmeltFilterButton("Conflict", "Green", 7500, ["Conflict"]),
+                createCustomSmeltFilterButton("Heaven", "Green", 7500, ["Heaven"]),
+                createCustomSmeltFilterButton("Solitude", "Green", 7500, ["Solitude"]),
+                createCustomSmeltFilterButton("Alleluia", "Green", 7500, ["Alleluia"]),
+                createCustomSmeltFilterButton("Elimination", "Green", 7500, ["Elimination"]),
             ]),
         ].forEach(category => { quickFiltersSectionCategoriesContainer.appendChild(category) });
 

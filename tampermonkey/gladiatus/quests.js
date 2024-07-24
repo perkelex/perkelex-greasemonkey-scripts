@@ -21,8 +21,8 @@
         /Mesoai\-Oasis/i, // s69 expedition
         /In the Heart of Decay/i, //s69 dungeon
 
-        /death hill/i,
-        /viking camp/i,
+        /bandit camp/i,
+        /In Enemy Hands/i,
         /opponents at expeditions/i,
 
         //misc
@@ -31,7 +31,7 @@
     const questsToRemoveAnyway = [
         /defeat each opponent at least once/i,
         /succession/i,
-        /defeat [0-9]+/i,
+        /defeat [0-9]+ (?!(opponents|enemies))/i,
         /In the Heart of Decay: Defeat the boss in this dungeon/i,
     ]
 
