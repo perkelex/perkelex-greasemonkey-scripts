@@ -90,6 +90,7 @@
 
             const materials = [
                 // prefix
+                /dairus/i, /amulius/i, /avalonius/i, /lepidus/i, /sextus/i, /titanius/i, // Dragon Scale - Titanius
                 /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
                 /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
                 /valerius/i, /mateus/i, /marcellus/i, /constantius/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
@@ -110,7 +111,7 @@
             ].some(pattern => name.innerText.match(pattern)) && Items.getQualityFromColor(itemQuality).match(new RegExp(Items.getMinimumQualityRegExStr("Blue"), "i")) ? pack.style.background = Constants.smeltForMaterials : null;
 
             const interest = [
-                /lucius/i, /antonius/i, /Sebastianus/i,
+                /lucius/i, /antonius/i, /Sebastianus/i, /Titanius/i
             ].some(pattern => name.innerText.match(pattern)) ? pack.style.background = Constants.ofInterest : null;
 
         }
@@ -122,7 +123,7 @@
 
             const scrolls = [
                 //prefix
-                /Táliths/i, /Ichorus/i, /Opiehnzas/i, /Lucius/i, /Antonius/i, /Sebastianus/i, /Kerrannas/i,
+                /Táliths/i, /Ichorus/i, /Opiehnzas/i, /Lucius/i, /Antonius/i, /Sebastianus/i, /Kerrannas/i, /Titanius/i,
 
                 //suffix
                 /heaven/i, /solitude/i, /alleluia/i, /earth/i, /elimination/i, /malice/i, /^hell&/i, /inferno/i,
@@ -130,13 +131,15 @@
 
             const materials = [
                 // prefix
+                /dairus/i, /amulius/i, /avalonius/i, /lepidus/i, /sextus/i, /titanius/i, // Dragon Scale - Titanius
                 /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
                 /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
                 /valerius/i, /mateus/i, /marcellus/i, /constantius/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
                 /orlelds/i, /Adendathiels/i, /Táliths/i, /Ashitills/i, // Flintstone - Táliths
                 /ichorus/i, /decimus/i, /jennifers/i, /trafans/i, // Sulphur - Ichorus
                 /Umbros/i, /Chucks/i, /Xenphlames/i, /Appius/i, // Storm rune - Opiehnzas
-                /Kerrannas/i, // Kerrannas
+                /Kerrannas/i, /Frientas/i, /Zickezackes/i, /Gadriewens/i, // Jute patch - Kerrannas
+                /Kosmonas/i, /Mimas/i, /Frabos/i, /Zeindras/i, /Umilawens/i, // Silk - Kerrannas
 
                 // suffix
                 /silence/i, /fragmentation/i, // Storm of Fortune - Delicacy
@@ -153,7 +156,7 @@
             ].some(pattern => name.innerText.match(pattern)) && Items.getQualityFromColor(itemQuality).match(new RegExp(Items.getMinimumQualityRegExStr("Blue"), "i")) ? pack.style.background = Constants.smeltForMaterials : null;
 
             const interest = [
-                /ichorus/i, /Táliths/i, /Opiehnzas/i, /Lucius/i, /Antonius/i, /Sebastianus/i,
+                /ichorus/i, /Táliths/i, /Opiehnzas/i, /Lucius/i, /Antonius/i, /Sebastianus/i, /Titanius/i,
             ].some(pattern => name.innerText.match(pattern)) ? pack.style.background = Constants.ofInterest : null;
 
         }

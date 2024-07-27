@@ -11,6 +11,9 @@
 (function() {
     'use strict';
 
+    //TODO:
+    //  -split quests in server and universals
+
     const questsToKeep = [
         // arenas
         /turma/i,
@@ -28,6 +31,7 @@
         //misc
         /items/i,
     ]
+
     const questsToRemoveAnyway = [
         /defeat each opponent at least once/i,
         /succession/i,

@@ -273,6 +273,12 @@
     }
 
     class Mercenary {
+        static top3 = {
+            "Tank": [],
+            "Healer": [],
+            "Damage": [],
+        }
+
         static getTypeFromId(id) {
             switch (id){
                 case "1":
@@ -288,6 +294,10 @@
                 default:
                     return "Damage";
             }
+        }
+
+        static getMercStats(element){
+            // TODO
         }
     }
 
@@ -484,13 +494,17 @@
     }
 
     function customMercFilter(type){
+        console.log(Mercenary.top3)
+        const top3 = Mercenary.top3[type][2] || null
+        console.log(top3)
+        if (!top3) return
         resetAuctionItemsDisplay();
 
         const auctionTable = document.querySelector("#auction_table");
 
-        const tdsToShow = []
-        const tdsToHide = []
-        const trs = []
+        // const tdsToShow = []
+        // const tdsToHide = []
+        // const trs = []
 
         auctionTable.querySelectorAll("td").forEach(td => {
             const form = td.querySelector("form");
@@ -503,9 +517,11 @@
 
                 if (!isMercAndMatchesType) {
                     td.style.display = "none";
-                    tdsToHide.push(td.cloneNode(true))
-                } else {
-                    tdsToShow.push(td.cloneNode(true));
+                    // tdsToHide.push(td.cloneNode(true))
+                } else if (parseInt(form.querySelector(".auction_bid_div").children[2].textContent.split(" ")[0]) < top3){
+                    console.log("not top3")
+                    td.style.display = "none";
+                    // tdsToShow.push(td.cloneNode(true));
                 }
             }
         });
@@ -524,9 +540,12 @@
     function hideUnwantedCells(table, complexCriteria) {
         table.querySelectorAll("td").forEach(td => {
             const form = td.querySelector("form");
-            if (form && !Array.from(complexCriteria).some(criteria => criteria.every(term => form.dataset.item_name.match(new RegExp(term, "i"))))) {
-                td.style.display = "none";
-            }
+            if (!form) return
+
+            const isFood = Items.isFoodItem(form.querySelector(".auction_item_div"))
+            const matchesName = Array.from(complexCriteria).some(criteria => criteria.every(term => form.dataset.item_name.match(new RegExp(term, "i"))))
+
+            if (isFood || !matchesName) td.style.display = "none"
         });
     }
 
@@ -580,7 +599,7 @@
                 Items.isFoodItem(form.querySelector(".auction_item_div")) &&
                 Items.isMinLevel(form.querySelector(".auction_item_div"), minLevel) &&
                 Food.isSmall(form.querySelector(".auction_item_div > div > div").classList[0].split("-")[3]) &&
-                parseInt(form.querySelector(".auction_bid_div input[type='text'][name='bid_amount']").value) <= 1000
+                parseInt(form.querySelector(".auction_bid_div input[type='text'][name='bid_amount']").value) <= 1500
             )
             let index = 0
             let timer = setInterval(() => {
@@ -772,27 +791,32 @@
                     }
                 });
 
-                const auctionTd = auctionItem.parentNode.parentNode.parentNode;
+                // const auctionTd = auctionItem.parentNode.parentNode.parentNode;
 
                 const mercType = Mercenary.getTypeFromId(item.classList[0].split("-")[3]);
                 const bidDiv = auctionItem.parentNode.querySelector(".auction_bid_div");
                 switch (mercType){
                     case "Tank":
                         // agi >= 360 ? auctionTd.style.display = "none" : auctionTd.style.display = "table-cell";
+                        Mercenary.top3[mercType].push(parseInt(agi))
                         info = `${agi} ${bidDiv.children[2].innerText}`;
                         break;
                     case "Healer":
                         // int >= 360 ? auctionTd.style.display = "none" : auctionTd.style.display = "table-cell";
+                        Mercenary.top3[mercType].push(parseInt(int))
                         info = `${int} ${bidDiv.children[2].innerText}`;
                         break;
                     case "Damage":
                         // dex >= 360 ? auctionTd.style.display = "none" : auctionTd.style.display = "table-cell";
+                        Mercenary.top3[mercType].push(parseInt(dex))
                         info = `${dex} ${bidDiv.children[2].innerText}`;
                         break;
                 }
                 bidDiv.children[2].innerText = info;
             })
         });
+
+        ["Tank", "Healer", "Damage"].forEach(mercType => { Mercenary.top3[mercType].sort((a, b) => b - a)})
     }
 
     function addQuickFilters() {
@@ -856,16 +880,18 @@
                 createSubCategory("High (80-100)"),
                 createFilterButton("Ichorus"),
                 createFilterButton("Lucius"),
+                createFilterButton("Gaius"),
                 createFilterButton("Antonius"),
-
-                createSubCategory("Healing"),
-                createFilterButton("Mandalus"),
-                createFilterButton("Aurelius"),
+                createFilterButton("Titanius"),
 
                 createSubCategory("End (100+)"),
                 createFilterButton("Sebastianus"),
                 createFilterButton("Gratius"),
                 createFilterButton("Gaias"),
+
+                createSubCategory("Healing"),
+                createFilterButton("Mandalus"),
+                createFilterButton("Aurelius"),
             ]),
 
             createFilterCategory("Suffix",
@@ -926,6 +952,16 @@
                     ]
                 ),
                 createSubCategory("Materials"),
+                createCustomSmeltFilterButton("Dragons Scale (Titanius)", "Blue", 15000,
+                    [
+                        ["dairus"],
+                        ["amulius"],
+                        ["avalonius"],
+                        ["lepidus"],
+                        ["sextus"],
+                        ["titanius"],
+                    ]
+                ),
                 createCustomSmeltFilterButton("Tincture of Stamina (Lucius)", "Blue", 15000,
                     [
                         ["lucius"],
@@ -994,17 +1030,18 @@
                     ]
                 ),
                 createSubCategory("Scrolls"),
-                createCustomSmeltFilterButton("Kerrannas", "Green", 7500, ["Kerrannas"]),
-                createCustomSmeltFilterButton("Táliths", "Green", 7500, ["Táliths"]),
-                createCustomSmeltFilterButton("Opiehnzas", "Green", 10000, ["Opiehnzas"]),
-                createCustomSmeltFilterButton("Ichorus", "Green", 12500, ["Ichorus"]),
+                createCustomSmeltFilterButton("Titanius", "Green", 15000, ["Titanius"]),
+                createCustomSmeltFilterButton("Antonius", "Green", 15000, ["Antonius"]),
                 createCustomSmeltFilterButton("Lucius", "Green", 15000, ["Lucius"]),
-                createCustomSmeltFilterButton("Antonius", "Green", 20000, ["Antonius"]),
-                createCustomSmeltFilterButton("Conflict", "Green", 7500, ["Conflict"]),
-                createCustomSmeltFilterButton("Heaven", "Green", 7500, ["Heaven"]),
-                createCustomSmeltFilterButton("Solitude", "Green", 7500, ["Solitude"]),
-                createCustomSmeltFilterButton("Alleluia", "Green", 7500, ["Alleluia"]),
-                createCustomSmeltFilterButton("Elimination", "Green", 7500, ["Elimination"]),
+                createCustomSmeltFilterButton("Ichorus", "Green", 12500, ["Ichorus"]),
+                createCustomSmeltFilterButton("Opiehnzas", "Green", 10000, ["Opiehnzas"]),
+                createCustomSmeltFilterButton("Táliths", "Green", 10000, ["Táliths"]),
+                createCustomSmeltFilterButton("Kerrannas", "Green", 10000, ["Kerrannas"]),
+                createCustomSmeltFilterButton("Conflict", "Green", 10000, ["Conflict"]),
+                createCustomSmeltFilterButton("Heaven", "Green", 10000, ["Heaven"]),
+                createCustomSmeltFilterButton("Solitude", "Green", 10000, ["Solitude"]),
+                createCustomSmeltFilterButton("Alleluia", "Green", 10000, ["Alleluia"]),
+                createCustomSmeltFilterButton("Elimination", "Green", 10000, ["Elimination"]),
             ]),
         ].forEach(category => { quickFiltersSectionCategoriesContainer.appendChild(category) });
 
