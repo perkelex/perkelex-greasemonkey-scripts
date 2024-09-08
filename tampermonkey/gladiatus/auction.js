@@ -494,9 +494,8 @@
     }
 
     function customMercFilter(type){
-        console.log(Mercenary.top3)
         const top3 = Mercenary.top3[type][2] || null
-        console.log(top3)
+        const top1 = Mercenary.top3[type][0] || null
         if (!top3) return
         resetAuctionItemsDisplay();
 
@@ -510,6 +509,8 @@
             const form = td.querySelector("form");
             if (form){
                 const itemDiv = form.querySelector(".auction_item_div")
+                const bidDiv = form.querySelector(".auction_bid_div")
+                const attributeValue = parseInt(bidDiv.children[2].textContent.split(" ")[0])
                 const itemClassListSplit = itemDiv.querySelector("div > div > div").classList[0].split("-")
                 const itemTypeId = itemClassListSplit[2]
                 const itemSubTypeId = itemClassListSplit[3]
@@ -518,10 +519,13 @@
                 if (!isMercAndMatchesType) {
                     td.style.display = "none";
                     // tdsToHide.push(td.cloneNode(true))
-                } else if (parseInt(form.querySelector(".auction_bid_div").children[2].textContent.split(" ")[0]) < top3){
-                    console.log("not top3")
+                } else if (attributeValue < top3){
                     td.style.display = "none";
                     // tdsToShow.push(td.cloneNode(true));
+                }
+
+                if (isMercAndMatchesType && attributeValue === top1){
+                    bidDiv.children[2].style.backgroundColor = "#fab73d"
                 }
             }
         });
@@ -962,12 +966,19 @@
                         ["titanius"],
                     ]
                 ),
-                createCustomSmeltFilterButton("Tincture of Stamina (Lucius)", "Blue", 15000,
+                createCustomSmeltFilterButton("Tinct. of Stamina (Lucius)", "Blue", 15000,
                     [
                         ["lucius"],
                         ["fernabasts"],
                         ["tantus"],
                         ["sentarions"],
+                    ]
+                ),
+                createCustomSmeltFilterButton("Tinct. of Perception (Lucius)", "Blue", 15000,
+                    [
+                        ["zimbris"],
+                        ["thorstens"],
+                        ["cheggovs"],
                     ]
                 ),
                 createCustomSmeltFilterButton("Crystal (Antonius)", "Blue", 15000,

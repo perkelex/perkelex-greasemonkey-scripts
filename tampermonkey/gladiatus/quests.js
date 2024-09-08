@@ -22,7 +22,8 @@
 
         // grind
         /Mesoai\-Oasis/i, // s69 expedition
-        /In the Heart of Decay/i, //s69 dungeon
+        /cliff jumper/i, // s69 expedition
+        /Sasama`s last journey/i, //s69 dungeon
 
         /caravan/i,
         /Fairground/i,
@@ -36,7 +37,7 @@
         /defeat each opponent at least once/i,
         /succession/i,
         /defeat [0-9]+ (?!(opponents|enemies))/i,
-        /In the Heart of Decay: Defeat the boss in this dungeon/i,
+        // /In the Heart of Decay: Defeat the boss in this dungeon/i,
     ]
 
     setTimeout(() => {

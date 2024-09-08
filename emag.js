@@ -49,4 +49,6 @@ setInterval(function() {
     }
 
     $("div.mywallet-product-ecredit-pricing").parent("div").remove();
+
+    $(".gdpr-cookie-banner").remove()
 }, 2000)

@@ -61,7 +61,16 @@
         element.style.display.contains("block") ? element.style.display = "none" : element.style.display = "block";
     }
 
-    function createSectionHeader(title, action = null) {
+    function CategoryHeader(name){
+        const header = document.createElement("div")
+        header.appendChild(document.createTextNode(name))
+        header.style.textDecoration = "underline";
+        header.style.fontWeight = "bold"
+        header.style.margin = "0rem 0.25rem";
+        return header
+    }
+
+    function SectionHeader(title, action = null) {
         const sectionHeader = document.createElement("h2");
         sectionHeader.classList.add("section-header");
         sectionHeader.setAttribute("id", `${nameToID(title)}`);
@@ -72,12 +81,46 @@
         return sectionHeader;
     }
 
-    function createSection(title) {
+    function Section(title) {
         const section = document.createElement("section");
         section.setAttribute("id", `${nameToID(title)}`);
         section.style.minHeight = "45px";
         section.style.display = "block";
         return section;
+    }
+
+    function Container(id, children, style) {
+        const container = document.createElement("div")
+        container.id = id
+        // Object.entries(inherentStyle).forEach((prop, value) => {container.setAttribute("style", `${prop}: ${value}`)})
+        if (style) Object.entries(style).forEach((prop, value) => {container.setAttribute("style", `${prop}: ${value}`)})
+        children.forEach(child => {container.appendChild(child)})
+        return container
+    }
+
+    function ColumnContainer(id, children, style){
+        const columnContainer = Container(id, children, style)
+        columnContainer.style.display = "flex"
+        columnContainer.style.flexDirection = "column"
+        columnContainer.style.gap = "0.25rem";
+        columnContainer.style.border = "1px solid black";
+        return columnContainer
+    }
+
+    function RowContainer(id, children, style){
+        const rowContainer = Container(id, children, style)
+        rowContainer.style.display = "flex"
+        rowContainer.style.flexDirection = "row"
+        rowContainer.style.justifyContent = "space-evenly"
+        return rowContainer
+    }
+
+    function GenericButton(title, criteria) {
+        const button = document.createElement("button")
+        button.appendChild(document.createTextNode(title));
+        button.classList.add("awesome-button")
+        button.style.fontSize = "1rem"
+        return button
     }
 
     function en69Packages(name, pack){
@@ -91,7 +134,7 @@
             const materials = [
                 // prefix
                 /dairus/i, /amulius/i, /avalonius/i, /lepidus/i, /sextus/i, /titanius/i, // Dragon Scale - Titanius
-                /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
+                /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Stamina - Lucius
                 /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
                 /valerius/i, /mateus/i, /marcellus/i, /constantius/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
                 /accuracy/i, /heaven/i, /sickness/i, // Protection Rune - Opiehnzas
@@ -132,7 +175,8 @@
             const materials = [
                 // prefix
                 /dairus/i, /amulius/i, /avalonius/i, /lepidus/i, /sextus/i, /titanius/i, // Dragon Scale - Titanius
-                /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Staminga - Lucius
+                /lucius/i, /fernabasts/i, /tantus/i, /sentarions/i, // Tincture of Stamina - Lucius
+                /zimbris/i, /thorstens/i, /cheggovs/i, // Tincture of Percpetion - Lucius
                 /manius/i, /gaius/i, /belisarius/i, /antonius/i, /titus/i, /quintus/i, /pontius/i, // Crystal - Antonius
                 /valerius/i, /mateus/i, /marcellus/i, /constantius/i, /servius/i, /dexterus/i, /giganticus/i, // Amethyst - Antonius
                 /orlelds/i, /Adendathiels/i, /Táliths/i, /Ashitills/i, // Flintstone - Táliths
@@ -166,6 +210,10 @@
         // Misc
         document.querySelector("#hidePackges").style.display = "none";
         document.querySelector("section.nBot_packages").style.display = "none";
+        document.querySelector("article.package-advance-filters > section").style.display = "none"
+        Array.from(document.querySelectorAll("h2.section-header")).filter(h2 => h2.textContent.contains("Advanced filters")).forEach(h2 => {h2.addEventListener("click",() => {
+            h2.nextElementSibling.style.display === "block" ? h2.nextElementSibling.style.display = "none" : h2.nextElementSibling.style.display = "block"
+        })})
 
         // Init
         const packagesArticle = Array.from(document.querySelectorAll("article")).filter(article => !article.classList.length)[0];
@@ -184,12 +232,24 @@
         gcaAdvancedFilters.querySelector("div.active-filters").style.minHeight = "0rem";
 
         // Quick filters
-        const quickFiltersSection = createSection("Quick Filters Section");
-        const quickFiltersSectionHeader = createSectionHeader("Quick Filters", showHideElement.bind(this, quickFiltersSection));
+        const quickFiltersSection = Section("Quick Filters Section");
+        const quickFiltersSectionHeader = SectionHeader("Quick Filters", showHideElement.bind(this, quickFiltersSection));
+
+        const filterCategoriesContainer = RowContainer("filter-categories-container", [
+            ColumnContainer("test-filter-category", [
+                CategoryHeader("Test category"),
+                GenericButton("test1"),
+                GenericButton("test2"),
+            ])
+        ])
+
+        quickFiltersSection.appendChild(filterCategoriesContainer)
         packagesArticle.insertBefore(quickFiltersSection, inventory.nextSibling);
         packagesArticle.insertBefore(quickFiltersSectionHeader, inventory.nextSibling);
 
+
         setInterval(() => {
+
             const packs = document.querySelectorAll(".packageItem");
             packs.forEach(pack => {
                 pack.style.margin = "0rem 0.5rem"
@@ -225,5 +285,5 @@
 
             Array.from(document.querySelectorAll("h2.section-header")).filter(node => node.innerText.contains("Content")).forEach(node => {node.innerText = `Content: ${packs.length} packages`;});
         }, 1000);
-    }, 250);
+    }, 500);
 })();
