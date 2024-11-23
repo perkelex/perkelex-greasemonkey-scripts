@@ -22,6 +22,7 @@ setInterval(function() {
         removeShortsFromSearchResults();
         removePeopleAlsoSearchedFor();
         removeEndOfVideoCards();
+        removeMembersOnlyContent();
     }
 }, 2000);
 
@@ -57,6 +58,10 @@ function removePeopleAlsoSearchedFor(){
 
 function removeEndOfVideoCards(){
     $("div.ytp-ce-element").remove();
+}
+
+function removeMembersOnlyContent(){
+    $("ytd-rich-item-renderer div.members-only").remove();
 }
 
 // converts hh:mm:ss to seconds for sane processing of time
