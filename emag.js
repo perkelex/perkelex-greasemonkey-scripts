@@ -34,7 +34,8 @@ const to_remove_by_id = [
 ]
 
 setInterval(function() {
-    $("div.card-item:contains('Promovat')").remove();
+    $("div.card-item span.hidden").remove()
+    $("div.card-item:contains('Promovat')").remove()
 
     for (const item of product_clutter_h2_section) {
         $("h2:contains('" + item + "')").parents("section").remove();
